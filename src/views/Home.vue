@@ -1,11 +1,41 @@
 <template>
-  <div class="home"></div>
+  <CircleLoader v-if="this.loading" />
+  <div class="home" v-else></div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import CircleLoader from "@/components/CircleLoader/index.vue";
+import api from "@/api";
+import * as APIAuth from "@/types/APIAuth";
 
-@Options({})
+@Options({
+  data() {
+    return {
+      loading: true,
+      token: null,
+    };
+  },
+  components: {
+    CircleLoader,
+  },
+  methods: {
+    run() {
+      // start app
+    },
+  },
+  async mounted() {
+    // check token
+    this.token = localStorage.getItem("access_token");
+    const res: APIAuth.CheckToken = await api.auth.checkToken(this.token);
+    if (res && res.status === "ok") {
+      this.loading = false;
+      this.run();
+    } else {
+      this.$router.push({ name: "Login" });
+    }
+  },
+})
 export default class Home extends Vue {}
 </script>
 
