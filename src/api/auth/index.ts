@@ -17,14 +17,14 @@ const request = function (
 };
 
 export default {
-  getUserAuthURL: function (): Promise<APIAuth.CheckToken> {
+  getUserAuthURL: function (): Promise<APIAuth.UserAuthURL> {
     const addr = "/login";
     const method = "GET";
     return request(addr, method);
   },
 
   checkToken: function (token: string): Promise<APIAuth.CheckToken> {
-    const addr = `/check_token?token=${token}`;
+    const addr = `/check_token?access_token=${token}`;
     const method = "GET";
     return request(addr, method);
   },
