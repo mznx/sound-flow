@@ -14,14 +14,25 @@ import * as APIAuth from "@/types/APIAuth";
     return {
       loading: true,
       token: null,
+      player: null,
     };
   },
   components: {
     CircleLoader,
   },
   methods: {
-    run() {
+    async run() {
       // start app
+      this.player = await this.connectToSpotifySDK();
+    },
+
+    connectToSpotifySDK() {
+      const script = document.createElement("script");
+      script.src = "https://sdk.scdn.co/spotify-player.js";
+      script.async = true;
+      document.body.appendChild(script);
+
+      return api.spotifySDK.connect(this.token);
     },
   },
   async mounted() {
