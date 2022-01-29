@@ -57,6 +57,7 @@
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import api from "@/api";
 
 @Options({
   data() {
@@ -66,10 +67,11 @@ import { Vue, Options } from "vue-class-component";
   },
   methods: {
     playPause() {
-      if (this.status === "pause") this.$store.commit("setStatus", "play");
-      else this.$store.commit("setStatus", "pause");
-
+      this.status === "pause"
+        ? this.$store.commit("setStatus", "play")
+        : this.$store.commit("setStatus", "pause");
       this.status = this.$store.state.status;
+      api.spotify.SDK.togglePlay(this.$store.state.player);
     },
   },
   mounted() {
