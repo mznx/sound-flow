@@ -41,6 +41,8 @@ import * as APIAuth from "@/types/APIAuth";
 
       this.$store.commit("setPlayer", player);
       this.$store.commit("setDeviceID", playback_instance.device_id);
+
+      await api.spotify.player.transferPlayback(this.$store.state.device_id);
     },
   },
   async mounted() {

@@ -36,4 +36,8 @@ export default {
   disconnect(player: Spotify.Player): void {
     player.disconnect();
   },
+
+  togglePlay(player: Spotify.Player): void {
+    player.togglePlay();
+  },
 };
