@@ -1,7 +1,7 @@
 import auth from "./auth";
-import spotifySDK from "./spotifySDK";
+import spotify from "./spotify";
 
 export default {
   auth,
-  spotifySDK,
+  spotify,
 };

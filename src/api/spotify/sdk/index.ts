@@ -21,12 +21,28 @@ const connect = function (token: string): Promise<Spotify.Player> {
         console.log("Device ID has gone offline", device_id);
       });
 
-      player.connect();
-      resolve(player);
+      player.connect().then((success) => {
+        resolve(player);
+      });
     };
+  });
+};
+
+const transferPlayback = function () {
+  const token = localStorage.getItem("access_token");
+
+  fetch("https://api.spotify.com/v1/me/player", {
+    method: "PUT",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+    body: JSON.stringify({ device_ids: ["token"] }),
+  }).then((res) => {
+    return res.json();
   });
 };
 
 export default {
   connect,
+  transferPlayback,
 };

@@ -36,7 +36,7 @@ import * as APIAuth from "@/types/APIAuth";
       script.async = true;
       document.body.appendChild(script);
 
-      return api.spotifySDK.connect(this.token);
+      return api.spotify.SDK.connect(this.token);
     },
   },
   async mounted() {
