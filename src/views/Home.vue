@@ -17,7 +17,6 @@ import * as APIAuth from "@/types/APIAuth";
     return {
       loading: true,
       token: null,
-      player: null,
     };
   },
   components: {
@@ -27,16 +26,21 @@ import * as APIAuth from "@/types/APIAuth";
   methods: {
     async run() {
       // start app
-      this.player = await this.connectToSpotifySDK();
+      await this.connectToSpotifySDK();
+      this.loading = false;
     },
 
-    connectToSpotifySDK() {
+    async connectToSpotifySDK() {
       const script = document.createElement("script");
       script.src = "https://sdk.scdn.co/spotify-player.js";
       script.async = true;
       document.body.appendChild(script);
 
-      return api.spotify.SDK.connect(this.token);
+      const player = await api.spotify.SDK.init(this.token);
+      const playback_instance = await api.spotify.SDK.connect(player);
+
+      this.$store.commit("setPlayer", player);
+      this.$store.commit("setDeviceID", playback_instance.device_id);
     },
   },
   async mounted() {
@@ -46,7 +50,6 @@ import * as APIAuth from "@/types/APIAuth";
       this.token
     );
     if (res && res.status === "ok") {
-      this.loading = false;
       this.run();
     } else {
       this.$router.push({ name: "Login" });
