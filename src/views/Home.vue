@@ -42,7 +42,9 @@ import * as APIAuth from "@/types/APIAuth";
   async mounted() {
     // check token
     this.token = localStorage.getItem("access_token");
-    const res: APIAuth.CheckToken = await api.auth.checkToken(this.token);
+    const res: APIAuth.CheckToken = await api.backend.auth.checkToken(
+      this.token
+    );
     if (res && res.status === "ok") {
       this.loading = false;
       this.run();

@@ -1,7 +1,7 @@
-import auth from "./auth";
+import backend from "./backend";
 import spotify from "./spotify";
 
 export default {
-  auth,
+  backend,
   spotify,
 };
