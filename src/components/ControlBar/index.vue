@@ -45,6 +45,8 @@ export default class ControlBar extends Vue {}
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding: 4px 0;
 }
 
 .cb-right {

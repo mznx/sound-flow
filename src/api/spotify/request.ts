@@ -12,11 +12,6 @@ const request = function (req_options: API.Request) {
     },
     body: req_options.body ? req_options.body : null,
   }).then((res) => {
-    // try {
-    //   var result = res.json();
-    // } catch {
-    //   var result = Promise.resolve(res);
-    // }
     res.json().then(
       () => {
         return res.json();

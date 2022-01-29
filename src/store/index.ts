@@ -5,6 +5,8 @@ export default createStore({
     status: "pause",
     player: null,
     device_id: null,
+    shuffle_state: false,
+    repeat_mode: "off",
   },
 
   mutations: {
@@ -18,6 +20,14 @@ export default createStore({
 
     setDeviceID(state, device_id) {
       state.device_id = device_id;
+    },
+
+    setShuffleState(state, shuffle_state) {
+      state.shuffle_state = shuffle_state;
+    },
+
+    setRepeatMode(state, repeat_mode) {
+      state.repeat_mode = repeat_mode;
     },
   },
 });

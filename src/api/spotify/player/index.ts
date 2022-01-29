@@ -26,4 +26,20 @@ export default {
     };
     return request(req_options);
   },
+
+  togglePlaybackShuffle(shuffle_state: boolean, device_id: string) {
+    const req_options: API.Request = {
+      method: "PUT",
+      path: `/me/player/shuffle?state=${shuffle_state}&device_id=${device_id}`,
+    };
+    return request(req_options);
+  },
+
+  toggleRepeatMode(repeat_mode: string, device_id: string) {
+    const req_options: API.Request = {
+      method: "PUT",
+      path: `/me/player/repeat?state=${repeat_mode}&device_id=${device_id}`,
+    };
+    return request(req_options);
+  },
 };

@@ -40,4 +40,12 @@ export default {
   togglePlay(player: Spotify.Player): void {
     player.togglePlay();
   },
+
+  previousTrack(player: Spotify.Player): void {
+    player.previousTrack();
+  },
+
+  nextTrack(player: Spotify.Player): void {
+    player.nextTrack();
+  },
 };
