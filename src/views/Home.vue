@@ -1,11 +1,14 @@
 <template>
   <CircleLoader v-if="this.loading" />
-  <div class="home" v-else></div>
+  <div class="home" v-else>
+    <ControlBar />
+  </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import CircleLoader from "@/components/CircleLoader/index.vue";
+import ControlBar from "@/components/ControlBar/index.vue";
 import api from "@/api";
 import * as APIAuth from "@/types/APIAuth";
 
@@ -19,6 +22,7 @@ import * as APIAuth from "@/types/APIAuth";
   },
   components: {
     CircleLoader,
+    ControlBar,
   },
   methods: {
     async run() {
