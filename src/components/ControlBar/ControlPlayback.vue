@@ -1,11 +1,78 @@
 <template>
   <div class="cb-playback">
-    <div class="cb-progress-bar"></div>
+    <div class="cb-progress-time">{{ msToTime(progress) }}</div>
+    <div class="cb-progress-bar">
+      <vue-slider
+        v-model="progress"
+        :max="duration"
+        v-on:change="onProgressChange"
+        :tooltip="'none'"
+        :railStyle="{ background: 'var(--color-control)' }"
+        :processStyle="{ background: 'var(--color-accent)' }"
+      />
+    </div>
+    <div class="cb-progress-time">{{ msToTime(duration) }}</div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { Vue, Options } from "vue-class-component";
+
+@Options({
+  data() {
+    return {
+      progress: 0,
+      duration: 0,
+      inverval: null,
+    };
+  },
+  computed: {
+    is_playing: function (): boolean {
+      return this.$store.state.player.playback_state.paused;
+    },
+    context: function () {
+      return this.$store.state.player.playback_state.context;
+    },
+  },
+  methods: {
+    updateProgress() {
+      clearInterval(this.inverval);
+      this.progress = this.$store.state.player.playback_state.position;
+
+      if (!this.$store.state.player.playback_state.paused) {
+        this.inverval = setInterval(() => {
+          if (this.progress + 1000 <= this.duration) {
+            this.progress += 1000;
+          }
+        }, 1000);
+      }
+    },
+
+    onProgressChange(value: number) {
+      console.log(value);
+      this.$store.state.player.player.seek(value);
+    },
+
+    msToTime(val: number): string {
+      const min = Math.trunc(val / 60000);
+      const sec = Math.trunc((val - min * 60000) / 1000);
+      return min + ":" + sec;
+    },
+  },
+  watch: {
+    context() {
+      this.duration = this.$store.state.player.playback_state.duration;
+      this.progress = this.$store.state.player.playback_state.position;
+    },
+    is_playing() {
+      this.updateProgress();
+    },
+  },
+  mounted() {
+    this.duration = this.$store.state.player.playback_state.duration;
+    this.updateProgress();
+  },
+})
 export default class ControlPlayback extends Vue {}
 </script>
 
@@ -18,8 +85,11 @@ export default class ControlPlayback extends Vue {}
 
 .cb-progress-bar {
   width: 100%;
-  height: 4px;
-  border-radius: 4px;
-  background-color: var(--color-control);
+}
+
+.cb-progress-time {
+  padding: 0 10px;
+  color: var(--color-text);
+  text-align: center;
 }
 </style>
