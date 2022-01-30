@@ -2,7 +2,7 @@
   <div class="cb-buttons">
     <button
       class="cb-shuffle"
-      :class="{ active: this.$store.state.shuffle_state }"
+      :class="{ active: this.$store.state.player.playback_state.shuffle }"
       @click="toggleShuffle"
     >
       <inline-svg
@@ -22,7 +22,7 @@
 
     <button class="cb-playpause" @click="playPause">
       <inline-svg
-        v-if="this.$store.state.status === 'pause'"
+        v-if="this.$store.state.player.playback_state.paused"
         :src="require('@/assets/icons/control-play.svg')"
         width="35"
         height="35"
@@ -46,8 +46,8 @@
     <button
       class="cb-repeat"
       :class="[
-        { active: this.$store.state.repeat_mode !== 'off' },
-        { track: this.$store.state.repeat_mode === 'track' },
+        { active: this.$store.state.player.playback_state.repeat_mode !== 0 },
+        { track: this.$store.state.player.playback_state.repeat_mode === 2 },
       ]"
       @click="toggleRepeatMode"
     >
@@ -70,46 +70,44 @@ import api from "@/api";
   },
   methods: {
     playPause() {
-      this.$store.state.status === "pause"
-        ? this.$store.commit("setStatus", "play")
-        : this.$store.commit("setStatus", "pause");
-      api.spotify.SDK.togglePlay(this.$store.state.player);
+      //
+      api.spotify.SDK.togglePlay(this.$store.state.player.player);
     },
 
     previousTrack() {
       //
-      api.spotify.SDK.previousTrack(this.$store.state.player);
+      api.spotify.SDK.previousTrack(this.$store.state.player.player);
     },
 
     nextTrack() {
       //
-      api.spotify.SDK.nextTrack(this.$store.state.player);
+      api.spotify.SDK.nextTrack(this.$store.state.player.player);
     },
 
     toggleShuffle() {
-      this.$store.commit("setShuffleState", !this.$store.state.shuffle_state);
       api.spotify.player.togglePlaybackShuffle(
-        this.$store.state.shuffle_state,
-        this.$store.state.device_id
+        !this.$store.state.player.playback_state.shuffle,
+        this.$store.state.player.device_id
       );
     },
 
     toggleRepeatMode() {
-      switch (this.$store.state.repeat_mode) {
-        case "off":
-          this.$store.commit("setRepeatMode", "context");
+      let repeat_mode = "";
+      switch (this.$store.state.player.playback_state.repeat_mode) {
+        case 0:
+          repeat_mode = "context";
           break;
-        case "context":
-          this.$store.commit("setRepeatMode", "track");
+        case 1:
+          repeat_mode = "track";
           break;
-        case "track":
-          this.$store.commit("setRepeatMode", "off");
+        case 2:
+          repeat_mode = "off";
           break;
       }
 
       api.spotify.player.toggleRepeatMode(
-        this.$store.state.repeat_mode,
-        this.$store.state.device_id
+        repeat_mode,
+        this.$store.state.player.device_id
       );
     },
   },
@@ -139,14 +137,6 @@ export default class ControlButtons extends Vue {}
       transition: all 0.3s ease;
     }
 
-    &:hover {
-      cursor: pointer;
-
-      svg {
-        fill: var(--color-control-hover);
-      }
-    }
-
     &.active svg {
       fill: var(--color-accent-light);
     }
@@ -154,11 +144,27 @@ export default class ControlButtons extends Vue {}
     &.track:after {
       content: "1";
       position: absolute;
-      top: 0;
-      right: 0;
-      color: var(--color-accent-light);
+      top: 4px;
+      right: 4px;
+      color: var(--color-fg);
       font-size: 10pt;
       font-weight: bold;
+      width: 20px;
+      height: 20px;
+      background-color: var(--color-accent);
+      border-radius: 50%;
+    }
+
+    &:hover {
+      cursor: pointer;
+
+      svg {
+        fill: var(--color-control-light);
+      }
+
+      &.active svg {
+        fill: #a3a1eb;
+      }
     }
   }
 }

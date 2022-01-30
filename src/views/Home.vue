@@ -31,18 +31,42 @@ import * as APIAuth from "@/types/APIAuth";
     },
 
     async connectToSpotifySDK() {
+      const waitTransferComplete = async () => {
+        return new Promise((resolve) => {
+          let interval = setInterval(async () => {
+            let state = this.$store.state.player.playback_state;
+            if (state !== null) {
+              clearInterval(interval);
+              resolve(state);
+            }
+          });
+        });
+      };
+
       const script = document.createElement("script");
       script.src = "https://sdk.scdn.co/spotify-player.js";
       script.async = true;
       document.body.appendChild(script);
 
       const player = await api.spotify.SDK.init(this.token);
+
+      player.addListener(
+        "player_state_changed",
+        (wps: Spotify.PlaybackState) => {
+          this.$store.commit("setPlaybackState", wps);
+        }
+      );
+
       const playback_instance = await api.spotify.SDK.connect(player);
 
       this.$store.commit("setPlayer", player);
       this.$store.commit("setDeviceID", playback_instance.device_id);
 
-      await api.spotify.player.transferPlayback(this.$store.state.device_id);
+      await api.spotify.player.transferPlayback(
+        this.$store.state.player.device_id
+      );
+
+      await waitTransferComplete();
     },
   },
   async mounted() {

@@ -31,7 +31,7 @@ export default class ControlBar extends Vue {}
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: #222222;
+  background-color: var(--color-fg);
   border-top: 1px solid #594d7e;
 }
 
