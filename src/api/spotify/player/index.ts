@@ -2,7 +2,8 @@ import * as API from "@/types/API";
 import request from "../request";
 
 export default {
-  getPlaybackState() {
+  // добавить тип PlaybackState
+  getPlaybackState(): Promise<null> {
     const req_options: API.Request = {
       method: "GET",
       path: "/me/player",
@@ -10,7 +11,8 @@ export default {
     return request(req_options);
   },
 
-  getAvailableDevices() {
+  // добавить тип AvaliableDevice
+  getAvailableDevices(): Promise<null> {
     const req_options: API.Request = {
       method: "GET",
       path: "/me/player/devices",
@@ -18,7 +20,7 @@ export default {
     return request(req_options);
   },
 
-  transferPlayback(device_id: string) {
+  transferPlayback(device_id: string): Promise<null | SpotifyApi.ErrorObject> {
     const req_options: API.Request = {
       method: "PUT",
       path: "/me/player",
@@ -27,7 +29,10 @@ export default {
     return request(req_options);
   },
 
-  togglePlaybackShuffle(shuffle_state: boolean, device_id: string) {
+  togglePlaybackShuffle(
+    shuffle_state: boolean,
+    device_id: string
+  ): Promise<null | SpotifyApi.ErrorObject> {
     const req_options: API.Request = {
       method: "PUT",
       path: `/me/player/shuffle?state=${shuffle_state}&device_id=${device_id}`,
@@ -35,7 +40,10 @@ export default {
     return request(req_options);
   },
 
-  toggleRepeatMode(repeat_mode: string, device_id: string) {
+  toggleRepeatMode(
+    repeat_mode: string,
+    device_id: string
+  ): Promise<null | SpotifyApi.ErrorObject> {
     const req_options: API.Request = {
       method: "PUT",
       path: `/me/player/repeat?state=${repeat_mode}&device_id=${device_id}`,
