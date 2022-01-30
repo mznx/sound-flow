@@ -55,7 +55,8 @@ import { Vue, Options } from "vue-class-component";
 
     msToTime(val: number): string {
       const min = Math.trunc(val / 60000);
-      const sec = Math.trunc((val - min * 60000) / 1000);
+      let sec = Math.trunc((val - min * 60000) / 1000);
+      if (sec < 10) sec = "0" + sec;
       return min + ":" + sec;
     },
   },
