@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --port 9000 --https",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@types/spotify-api": "^0.0.13",
