@@ -10,7 +10,7 @@
 import { Options, Vue } from "vue-class-component";
 import CircleLoader from "@/components/CircleLoader/index.vue";
 import api from "@/api";
-import * as APIAuth from "@/types/APIAuth";
+import * as API from "@/types/API";
 
 @Options({
   data() {
@@ -37,7 +37,7 @@ import * as APIAuth from "@/types/APIAuth";
       }
 
       this.process = true;
-      const res: APIAuth.UserAuthURL = await api.backend.auth.getUserAuthURL();
+      const res: API.UserAuthURL = await api.backend.auth.getUserAuthURL();
 
       if (res.state) {
         localStorage.setItem(res.state_key, res.state);
@@ -68,9 +68,7 @@ import * as APIAuth from "@/types/APIAuth";
     async checkToken(): Promise<boolean> {
       const token: string | null = localStorage.getItem("access_token");
       if (token) {
-        const res: APIAuth.CheckToken = await api.backend.auth.checkToken(
-          token
-        );
+        const res: API.CheckToken = await api.backend.auth.checkToken(token);
         if (res && res.status === "ok") return true;
       }
 

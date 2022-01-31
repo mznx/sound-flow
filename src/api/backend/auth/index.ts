@@ -1,23 +1,22 @@
 import * as API from "@/types/API";
-import * as APIAuth from "@/types/APIAuth";
 import request from "../request";
 
 export default {
-  getUserAuthURL: function (): Promise<APIAuth.UserAuthURL> {
+  getUserAuthURL: function (): Promise<API.UserAuthURL> {
     const req_options: API.Request = {
       method: "GET",
       path: "/auth/login",
     };
 
-    return request<APIAuth.UserAuthURL>(req_options);
+    return request<API.UserAuthURL>(req_options);
   },
 
-  checkToken: function (token: string): Promise<APIAuth.CheckToken> {
+  checkToken: function (token: string): Promise<API.CheckToken> {
     const req_options: API.Request = {
       method: "GET",
       path: `/auth/check_token?access_token=${token}`,
     };
 
-    return request<APIAuth.CheckToken>(req_options);
+    return request<API.CheckToken>(req_options);
   },
 };

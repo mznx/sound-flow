@@ -5,3 +5,13 @@ export interface Request {
 }
 
 export type NullOrError = null | SpotifyApi.ErrorObject;
+
+export interface UserAuthURL {
+  link: string;
+  state_key: string;
+  state: string;
+}
+
+export interface CheckToken {
+  status: string;
+}
