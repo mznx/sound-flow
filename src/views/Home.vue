@@ -10,7 +10,7 @@ import { Options, Vue } from "vue-class-component";
 import CircleLoader from "@/components/CircleLoader/index.vue";
 import ControlBar from "@/components/ControlBar/index.vue";
 import api from "@/api";
-import * as APIAuth from "@/types/APIAuth";
+import * as API from "@/types/API";
 
 @Options({
   data() {
@@ -72,9 +72,7 @@ import * as APIAuth from "@/types/APIAuth";
   async mounted() {
     // check token
     this.token = localStorage.getItem("access_token");
-    const res: APIAuth.CheckToken = await api.backend.auth.checkToken(
-      this.token
-    );
+    const res: API.CheckToken = await api.backend.auth.checkToken(this.token);
     if (res && res.status === "ok") {
       this.run();
     } else {
