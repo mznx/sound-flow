@@ -4,25 +4,23 @@ import request from "../request";
 export default {
   getAlbum(
     id: string
-  ): Promise<SpotifyApi.SingleAlbumResponse | SpotifyApi.ErrorObject | null> {
+  ): Promise<SpotifyApi.SingleAlbumResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "GET",
       path: `/albums/${id}`,
     };
-    return request(req_options);
+    return request<SpotifyApi.SingleAlbumResponse>(req_options);
   },
 
   getAlbums(
     ids: string,
     market: string
-  ): Promise<
-    SpotifyApi.MultipleAlbumsResponse | SpotifyApi.ErrorObject | null
-  > {
+  ): Promise<SpotifyApi.MultipleAlbumsResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "GET",
       path: `/albums?ids=${ids}&market=${market}`,
     };
-    return request(req_options);
+    return request<SpotifyApi.MultipleAlbumsResponse>(req_options);
   },
 
   getAlbumsTracks(
@@ -30,11 +28,11 @@ export default {
     market: string,
     limit = 50,
     offset = 0
-  ): Promise<SpotifyApi.AlbumTracksResponse | SpotifyApi.ErrorObject | null> {
+  ): Promise<SpotifyApi.AlbumTracksResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "GET",
       path: `/albums/${id}/tracks?market=${market}&limit=${limit}&offset=${offset}`,
     };
-    return request(req_options);
+    return request<SpotifyApi.AlbumTracksResponse>(req_options);
   },
 };

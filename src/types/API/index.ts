@@ -3,3 +3,5 @@ export interface Request {
   path: string;
   body?: string;
 }
+
+export type NullOrError = null | SpotifyApi.ErrorObject;

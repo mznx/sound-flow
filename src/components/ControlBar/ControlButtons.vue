@@ -105,7 +105,7 @@ import api from "@/api";
           break;
       }
 
-      api.spotify.player.toggleRepeatMode(
+      api.spotify.player.setRepeatMode(
         repeat_mode,
         this.$store.state.player.device_id
       );
