@@ -108,6 +108,58 @@ declare namespace SpotifyApi {
     id: string;
   }
 
+  // users
+  interface GetUserTopArtistsParameterObject {
+    limit?: number;
+    offset?: number;
+    time_range?: string;
+  }
+
+  interface GetUserTopTracksParameterObject {
+    limit?: number;
+    offset?: number;
+    time_range?: string;
+  }
+
+  interface GetUserProfileParameterObject {
+    user_id: string;
+  }
+
+  interface FollowPlaylistParameterObject {
+    playlist_id: string;
+    public?: boolean;
+  }
+
+  interface UnfollowPlaylistParameterObject {
+    playlist_id: string;
+  }
+
+  interface GetFollowedArtistsParameterObject {
+    type: string;
+    limit?: number;
+    after?: string;
+  }
+
+  interface FollowArtistsOrUsersParameterObject {
+    ids: string;
+    type: string;
+  }
+
+  interface UnfollowArtistsOrUsersParameterObject {
+    ids: string;
+    type: string;
+  }
+
+  interface CheckUserFollowArtistsOrUsersParameterObject {
+    ids: string;
+    type: string;
+  }
+
+  interface CheckUsersFollowPlaylistParameterObject {
+    playlist_id: string;
+    ids: string;
+  }
+
   // playlists
   interface GetPlaylistParameterObject {
     playlist_id: string;

@@ -1,4 +1,5 @@
 import * as API from "@/types/API";
+import * as utils from "@/utils";
 import request from "../request";
 
 export default {
@@ -12,114 +13,110 @@ export default {
     return request<SpotifyApi.CurrentUsersProfileResponse>(req_options);
   },
 
-  getUsersTopArtists(
-    limit?: number,
-    offset?: number,
-    time_range?: string
+  getUserTopArtists(
+    opts: SpotifyApi.GetUserTopArtistsParameterObject
   ): Promise<SpotifyApi.UsersTopArtistsResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/me/top/artists?limit=${limit}&offset=${offset}&time_range=${time_range}`,
+      path: `/me/top/artists?${query}`,
     };
     return request<SpotifyApi.UsersTopArtistsResponse>(req_options);
   },
 
-  getUsersTopTracks(
-    limit?: number,
-    offset?: number,
-    time_range?: string
+  getUserTopTracks(
+    opts: SpotifyApi.GetUserTopTracksParameterObject
   ): Promise<SpotifyApi.UsersTopTracksResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/me/top/tracks?limit=${limit}&offset=${offset}&time_range=${time_range}`,
+      path: `/me/top/tracks?${query}`,
     };
     return request<SpotifyApi.UsersTopTracksResponse>(req_options);
   },
 
-  getUsersProfile(
-    user_id: number
+  getUserProfile(
+    opts: SpotifyApi.GetUserProfileParameterObject
   ): Promise<SpotifyApi.UserProfileResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "GET",
-      path: `/users/${user_id}`,
+      path: `/users/${opts.user_id}`,
     };
     return request<SpotifyApi.UserProfileResponse>(req_options);
   },
 
   followPlaylist(
-    playlist_id: string,
-    is_public?: boolean
+    opts: SpotifyApi.FollowPlaylistParameterObject
   ): Promise<API.NullOrError> {
     const req_options: API.Request = {
       method: "PUT",
-      path: `/playlists/${playlist_id}/followers`,
-      body: JSON.stringify({ public: is_public }),
+      path: `/playlists/${opts.playlist_id}/followers`,
+      body: JSON.stringify(opts),
     };
     return request(req_options);
   },
 
-  unfollowPlaylist(playlist_id: string): Promise<API.NullOrError> {
+  unfollowPlaylist(
+    opts: SpotifyApi.UnfollowPlaylistParameterObject
+  ): Promise<API.NullOrError> {
     const req_options: API.Request = {
       method: "DELETE",
-      path: `/playlists/${playlist_id}/followers`,
+      path: `/playlists/${opts.playlist_id}/followers`,
     };
     return request(req_options);
   },
 
   getFollowedArtists(
-    limit?: number,
-    after?: string,
-    type?: string
+    opts: SpotifyApi.GetFollowedArtistsParameterObject
   ): Promise<SpotifyApi.UsersFollowedArtistsResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/me/following?limit=${limit}&after=${after}&type=${type}`,
+      path: `/me/following?${query}`,
     };
     return request<SpotifyApi.UsersFollowedArtistsResponse>(req_options);
   },
 
   followArtistsOrUsers(
-    type: string,
-    ids: string[]
+    opts: SpotifyApi.FollowArtistsOrUsersParameterObject
   ): Promise<SpotifyApi.FollowArtistsOrUsersResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "PUT",
-      path: `/me/following?type=${type}`,
-      body: JSON.stringify({ ids }),
+      path: `/me/following?${query}`,
     };
     return request<SpotifyApi.FollowArtistsOrUsersResponse>(req_options);
   },
 
   unfollowArtistsOrUsers(
-    type: string,
-    ids: string[]
+    opts: SpotifyApi.UnfollowArtistsOrUsersParameterObject
   ): Promise<SpotifyApi.UnfollowArtistsOrUsersResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "DELETE",
-      path: `/me/following?type=${type}`,
-      body: JSON.stringify({ ids }),
+      path: `/me/following?${query}`,
     };
     return request<SpotifyApi.UnfollowArtistsOrUsersResponse>(req_options);
   },
 
   checkUserFollowArtistsOrUsers(
-    type: string,
-    ids: string
+    opts: SpotifyApi.CheckUserFollowArtistsOrUsersParameterObject
   ): Promise<SpotifyApi.UserFollowsUsersOrArtistsResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/me/following/contains?type=${type}&ids=${ids}`,
+      path: `/me/following/contains?${query}`,
     };
     return request<SpotifyApi.UserFollowsUsersOrArtistsResponse>(req_options);
   },
 
   checkUsersFollowPlaylist(
-    playlist_id: string,
-    ids: string
+    opts: SpotifyApi.CheckUsersFollowPlaylistParameterObject
   ): Promise<SpotifyApi.UsersFollowPlaylistResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/playlists/${playlist_id}/followers/contains?ids=${ids}`,
+      path: `/playlists/${opts.playlist_id}/followers/contains?${query}`,
     };
     return request<SpotifyApi.UsersFollowPlaylistResponse>(req_options);
   },
