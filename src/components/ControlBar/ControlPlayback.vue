@@ -1,6 +1,6 @@
 <template>
   <div class="cb-playback">
-    <div class="cb-progress-time">{{ msToTime(progress) }}</div>
+    <div class="cb-progress-time">{{ getTime(progress) }}</div>
     <div class="cb-progress-bar">
       <vue-slider
         v-model="progress"
@@ -11,12 +11,13 @@
         :processStyle="{ background: 'var(--color-accent)' }"
       />
     </div>
-    <div class="cb-progress-time">{{ msToTime(duration) }}</div>
+    <div class="cb-progress-time">{{ getTime(duration) }}</div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import * as utils from "@/utils";
 
 @Options({
   data() {
@@ -53,12 +54,8 @@ import { Vue, Options } from "vue-class-component";
       this.$store.state.player.player.seek(value);
     },
 
-    msToTime(val: number): string {
-      const min = Math.trunc(val / 60000);
-      const sec = Math.trunc((val - min * 60000) / 1000);
-      let sec_str = String(sec);
-      if (sec < 10) sec_str = "0" + sec_str;
-      return min + ":" + sec_str;
+    getTime(value: number) {
+      return utils.msToTime(value);
     },
   },
   watch: {
