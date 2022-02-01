@@ -67,6 +67,47 @@ declare namespace SpotifyApi {
     id: string;
   }
 
+  // tracks
+  interface GetTrackParameterObject {
+    id: string;
+    market?: string;
+  }
+
+  interface GetTracksParameterObject {
+    ids: string;
+    market?: string;
+  }
+
+  interface GetSavedTracksParameterObject {
+    limit?: number;
+    offset?: number;
+    market?: string;
+  }
+
+  interface SaveTracksParameterObject {
+    ids: string[];
+  }
+
+  interface RemoveTracksParameterObject {
+    ids: string[];
+  }
+
+  interface CheckSavedTracksParameterObject {
+    ids: string;
+  }
+
+  interface GetTracksAudioFeaturesParameterObject {
+    ids: string;
+  }
+
+  interface GetTrackAudioFeaturesParameterObject {
+    id: string;
+  }
+
+  interface GetTrackAudioAnalysisParameterObject {
+    id: string;
+  }
+
   // playlists
   interface GetPlaylistParameterObject {
     playlist_id: string;
