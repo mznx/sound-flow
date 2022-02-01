@@ -15,7 +15,8 @@
     "types": [
       "webpack-env",
       "spotify-api",
-      "spotify-web-playback-sdk"
+      "spotify-web-playback-sdk",
+      "./src/types/SpotifyApiExtension",
     ],
     "paths": {
       "@/*": [
