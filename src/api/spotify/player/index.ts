@@ -13,7 +13,10 @@ export default {
   },
 
   // в SpotifyApi нет типа для параметров, только TransferPlaybackParameterObject
-  transferPlayback(device_id: string, play = false): Promise<API.NullOrError> {
+  transferPlayback(
+    device_id: string,
+    play?: boolean
+  ): Promise<API.NullOrError> {
     const req_options: API.Request = {
       method: "PUT",
       path: "/me/player",

@@ -14,7 +14,7 @@ const request = function <T>(opts: API.Request): Promise<T | API.NullOrError> {
     body: opts.body ? opts.body : null,
   })
     .then((res) => {
-      if (res.ok) return res.json();
+      return res.json();
     })
     .then((res) => {
       return res;
