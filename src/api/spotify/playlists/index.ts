@@ -1,184 +1,156 @@
 import * as API from "@/types/API";
+import * as utils from "@/utils";
 import request from "../request";
 
 export default {
   getPlaylist(
-    playlist_id: string,
-    fields?: string,
-    market?: string
+    opts: SpotifyApi.GetPlaylistParameterObject
   ): Promise<SpotifyApi.SinglePlaylistResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/playlists/${playlist_id}?fields=${fields}&market=${market}`,
+      path: `/playlists/${opts.playlist_id}?${query}`,
     };
     return request<SpotifyApi.SinglePlaylistResponse>(req_options);
   },
 
   changePlaylistDetails(
-    playlist_id: string,
-    name?: string,
-    publics?: boolean,
-    collaborative?: boolean,
-    description?: string
+    opts: SpotifyApi.ChangePlaylistDetailsParameterObject
   ): Promise<SpotifyApi.ChangePlaylistDetailsResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "PUT",
-      path: `/playlists/${playlist_id}`,
-      body: JSON.stringify({ name, publics, collaborative, description }),
+      path: `/playlists/${opts.playlist_id}`,
+      body: JSON.stringify(opts),
     };
     return request<SpotifyApi.ChangePlaylistDetailsResponse>(req_options);
   },
 
   getPlaylistTracks(
-    playlist_id: string,
-    fields?: string,
-    limit?: number,
-    offset?: number,
-    market?: string
+    opts: SpotifyApi.GetPlaylistTracksParameterObject
   ): Promise<SpotifyApi.PlaylistTrackResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/playlists/${playlist_id}/tracks?fields=${fields}&limit=${limit}&offset=${offset}&market=${market}`,
+      path: `/playlists/${opts.playlist_id}/tracks?${query}`,
     };
     return request<SpotifyApi.PlaylistTrackResponse>(req_options);
   },
 
   addTracksToPlaylist(
-    playlist_id: string,
-    position?: number,
-    uris?: string[]
+    opts: SpotifyApi.AddTracksToPlaylistParameterObject
   ): Promise<SpotifyApi.AddTracksToPlaylistResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "POST",
-      path: `/playlists/${playlist_id}/tracks`,
-      body: JSON.stringify({ position, uris }),
+      path: `/playlists/${opts.playlist_id}/tracks`,
+      body: JSON.stringify(opts),
     };
     return request<SpotifyApi.AddTracksToPlaylistResponse>(req_options);
   },
 
   reorderPlaylistTracks(
-    playlist_id: string,
-    range_start?: number,
-    insert_before?: number,
-    range_length?: number,
-    snapshot_id?: string
+    opts: SpotifyApi.ReorderPlaylistTracksParameterObject
   ): Promise<SpotifyApi.ReorderPlaylistTracksResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "PUT",
-      path: `/playlists/${playlist_id}/tracks`,
-      body: JSON.stringify({
-        range_start,
-        insert_before,
-        range_length,
-        snapshot_id,
-      }),
+      path: `/playlists/${opts.playlist_id}/tracks`,
+      body: JSON.stringify(opts),
     };
     return request<SpotifyApi.ReorderPlaylistTracksResponse>(req_options);
   },
 
   replacePlaylistTracks(
-    playlist_id: string,
-    uris?: string[]
+    opts: SpotifyApi.ReplacePlaylistTracksParameterObject
   ): Promise<SpotifyApi.ReplacePlaylistTracksResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "PUT",
-      path: `/playlists/${playlist_id}/tracks`,
-      body: JSON.stringify({ uris }),
+      path: `/playlists/${opts.playlist_id}/tracks`,
+      body: JSON.stringify(opts),
     };
     return request<SpotifyApi.ReplacePlaylistTracksResponse>(req_options);
   },
 
   removePlaylistTracks(
-    playlist_id: string,
-    tracks?: SpotifyApi.TrackLinkObject[]
+    opts: SpotifyApi.RemovePlaylistTracksParameterObject
   ): Promise<SpotifyApi.RemoveTracksFromPlaylistResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "DELETE",
-      path: `/playlists/${playlist_id}/tracks`,
-      body: JSON.stringify({ tracks }),
+      path: `/playlists/${opts.playlist_id}/tracks`,
+      body: JSON.stringify(opts),
     };
     return request<SpotifyApi.RemoveTracksFromPlaylistResponse>(req_options);
   },
 
   getCurrentUserPlaylists(
-    limit?: number,
-    offset?: number
+    opts: SpotifyApi.GetCurrentUserPlaylistsParameterObject
   ): Promise<SpotifyApi.ListOfCurrentUsersPlaylistsResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/me/playlists?limit=${limit}&offset=${offset}`,
+      path: `/me/playlists?${query}`,
     };
     return request<SpotifyApi.ListOfCurrentUsersPlaylistsResponse>(req_options);
   },
 
   getUserPlaylists(
-    user_id: string,
-    limit?: number,
-    offset?: number
+    opts: SpotifyApi.GetUserPlaylistsParameterObject
   ): Promise<SpotifyApi.ListOfUsersPlaylistsResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/users/${user_id}/playlists?limit=${limit}&offset=${offset}`,
+      path: `/users/${opts.user_id}/playlists?${query}`,
     };
     return request<SpotifyApi.ListOfUsersPlaylistsResponse>(req_options);
   },
 
   createPlaylist(
-    user_id: string,
-    name: string,
-    publics?: boolean,
-    collaborative?: boolean,
-    description?: string
+    opts: SpotifyApi.CreatePlaylistParameterObject
   ): Promise<SpotifyApi.CreatePlaylistResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "POST",
-      path: `/users/${user_id}/playlists`,
-      body: JSON.stringify({ name, publics, collaborative, description }),
+      path: `/users/${opts.user_id}/playlists`,
+      body: JSON.stringify(opts),
     };
     return request<SpotifyApi.CreatePlaylistResponse>(req_options);
   },
 
   getFeaturedPlaylists(
-    country?: string,
-    locale?: string,
-    timestamp?: string,
-    limit?: number,
-    offset?: number
+    opts: SpotifyApi.GetFeaturedPlaylistsParameterObject
   ): Promise<SpotifyApi.ListOfFeaturedPlaylistsResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/browse/featured-playlists?country=${country}&locale=${locale}&timestamp=${timestamp}&limit=${limit}&offset=${offset}`,
+      path: `/browse/featured-playlists?${query}`,
     };
     return request<SpotifyApi.ListOfFeaturedPlaylistsResponse>(req_options);
   },
 
   getCategorysPlaylists(
-    category_id: string,
-    country?: string,
-    limit?: number,
-    offset?: number
+    opts: SpotifyApi.GetCategorysPlaylistsParameterObject
   ): Promise<SpotifyApi.CategoryPlaylistsResponse | API.NullOrError> {
+    const query = utils.paramObjToQueryStr(opts);
     const req_options: API.Request = {
       method: "GET",
-      path: `/browse/categories/${category_id}/playlists?country=${country}&limit=${limit}&offset=${offset}`,
+      path: `/browse/categories/${opts.category_id}/playlists?${query}`,
     };
     return request<SpotifyApi.CategoryPlaylistsResponse>(req_options);
   },
 
   getPlaylistImage(
-    playlist_id: string
+    opts: SpotifyApi.GetPlaylistImageParameterObject
   ): Promise<SpotifyApi.ImageObject[] | API.NullOrError> {
     const req_options: API.Request = {
       method: "GET",
-      path: `/playlists/${playlist_id}/images`,
+      path: `/playlists/${opts.playlist_id}/images`,
     };
     return request<SpotifyApi.ImageObject[]>(req_options);
   },
 
-  setPlaylistImage(playlist_id: string): Promise<API.NullOrError> {
+  setPlaylistImage(
+    opts: SpotifyApi.SetPlaylistImageParameterObject
+  ): Promise<API.NullOrError> {
     const req_options: API.Request = {
       method: "PUT",
-      path: `/playlists/${playlist_id}/images`,
+      path: `/playlists/${opts.playlist_id}/images`,
     };
     return request(req_options);
   },
