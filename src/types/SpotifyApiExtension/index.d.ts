@@ -41,6 +41,32 @@ declare namespace SpotifyApi {
     country?: string;
   }
 
+  // artists
+  interface GetArtistParameterObject {
+    id: string;
+  }
+
+  interface GetArtistsParameterObject {
+    ids: string;
+  }
+
+  interface GetArtistAlbumsParameterObject {
+    id: string;
+    include_groups?: string;
+    limit?: number;
+    offset?: number;
+    market?: string;
+  }
+
+  interface GetArtisTopTracksParameterObject {
+    id: string;
+    market?: string;
+  }
+
+  interface GetArtistRelatedArtistsParameterObject {
+    id: string;
+  }
+
   // playlists
   interface GetPlaylistParameterObject {
     playlist_id: string;
