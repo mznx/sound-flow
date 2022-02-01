@@ -1,4 +1,5 @@
 declare namespace SpotifyApi {
+  // playlists
   interface GetPlaylistParameterObject {
     playlist_id: string;
     fields?: string;
@@ -85,5 +86,56 @@ declare namespace SpotifyApi {
 
   interface SetPlaylistImageParameterObject {
     playlist_id: string;
+  }
+
+  // player
+  interface GetPlaybackStateParameterObject {
+    market?: string;
+  }
+
+  interface TransferPlaybackParameterObject {
+    device_ids: string[];
+    play?: boolean;
+  }
+
+  interface GetCurrentTrackParameterObject {
+    market?: string;
+  }
+
+  interface PausePlaybackParameterObject {
+    device_id?: string;
+  }
+
+  interface NextTrackParameterObject {
+    device_id?: string;
+  }
+
+  interface PrevTrackParameterObject {
+    device_id?: string;
+  }
+
+  interface SeekToPositionParameterObject {
+    position_ms: number;
+    device_id?: string;
+  }
+
+  interface SetRepeatModeParameterObject {
+    state: string;
+    device_id?: string;
+  }
+
+  interface SetVolumeParameterObject {
+    volume_percent: number;
+    device_id?: strin;
+  }
+
+  interface TogglePlaybackShuffleParameterObject {
+    state: boolean;
+    device_id?: string;
+  }
+
+  interface AddToPlaybackQueueParameterObject {
+    uri: string;
+    device_id?: string;
   }
 }

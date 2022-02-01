@@ -62,9 +62,9 @@ import * as API from "@/types/API";
       this.$store.commit("setPlayer", player);
       this.$store.commit("setDeviceID", playback_instance.device_id);
 
-      await api.spotify.player.transferPlayback(
-        this.$store.state.player.device_id
-      );
+      await api.spotify.player.transferPlayback({
+        device_ids: [this.$store.state.player.device_id],
+      });
 
       await waitTransferComplete();
     },

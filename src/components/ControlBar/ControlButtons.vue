@@ -85,10 +85,10 @@ import api from "@/api";
     },
 
     toggleShuffle() {
-      api.spotify.player.togglePlaybackShuffle(
-        !this.$store.state.player.playback_state.shuffle,
-        this.$store.state.player.device_id
-      );
+      api.spotify.player.togglePlaybackShuffle({
+        state: !this.$store.state.player.playback_state.shuffle,
+        device_id: this.$store.state.player.device_id,
+      });
     },
 
     toggleRepeatMode() {
@@ -105,10 +105,10 @@ import api from "@/api";
           break;
       }
 
-      api.spotify.player.setRepeatMode(
-        repeat_mode,
-        this.$store.state.player.device_id
-      );
+      api.spotify.player.setRepeatMode({
+        state: repeat_mode,
+        device_id: this.$store.state.player.device_id,
+      });
     },
   },
 })
