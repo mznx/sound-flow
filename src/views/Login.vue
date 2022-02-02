@@ -24,6 +24,18 @@ import * as API from "@/types/API";
   },
 
   methods: {
+    popupEvent(event: MessageEvent) {
+      const data = event.data;
+      switch (data.status) {
+        case "ok":
+          window.removeEventListener("message", this.popupEvent);
+          this.$router.push({ name: "Home" });
+          break;
+        default:
+          console.log("switch (data.status): default");
+      }
+    },
+
     async login() {
       // login process
       const title: HTMLHeadingElement | null =
@@ -47,20 +59,7 @@ import * as API from "@/types/API";
           "width=800,height=600"
         );
         if (popup) {
-          window.addEventListener(
-            "message",
-            (event) => {
-              const data = event.data;
-              switch (data.status) {
-                case "ok":
-                  this.$router.push({ name: "Home" });
-                  break;
-                default:
-                  console.log("switch (data.status): default");
-              }
-            },
-            false
-          );
+          window.addEventListener("message", this.popupEvent, false);
         }
       }
     },
