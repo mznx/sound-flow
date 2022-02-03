@@ -2,13 +2,13 @@
   <div class="cb-playback">
     <div class="cb-progress-time">{{ getTime(progress) }}</div>
     <div class="cb-progress-bar">
-      <vue-slider
+      <Slider
         v-model="progress"
+        :style_bg="{ backgroundColor: 'var(--color-control)' }"
+        :style_fg="{ backgroundColor: 'var(--color-accent)' }"
+        :style_dot="{ backgroundColor: 'var(--color-control-light)' }"
         :max="duration"
-        v-on:change="onProgressChange"
-        :tooltip="'none'"
-        :railStyle="{ background: 'var(--color-control)' }"
-        :processStyle="{ background: 'var(--color-accent)' }"
+        @up="onProgressChange"
       />
     </div>
     <div class="cb-progress-time">{{ getTime(duration) }}</div>
@@ -18,6 +18,7 @@
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
 import * as utils from "@/utils";
+import Slider from "@/components/Slider/index.vue";
 
 @Options({
   data() {
@@ -26,6 +27,9 @@ import * as utils from "@/utils";
       duration: 0,
       inverval: null,
     };
+  },
+  components: {
+    Slider,
   },
   computed: {
     is_playing: function (): boolean {
@@ -49,9 +53,8 @@ import * as utils from "@/utils";
       }
     },
 
-    onProgressChange(value: number) {
-      console.log(value);
-      this.$store.state.player.player.seek(value);
+    onProgressChange() {
+      this.$store.state.player.player.seek(this.progress);
     },
 
     getTime(value: number) {
