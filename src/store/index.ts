@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 
+import app from "./modules/app";
 import player from "./modules/player";
 
 export default createStore({
@@ -7,6 +8,7 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {
+    app,
     player,
   },
 });
