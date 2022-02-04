@@ -10,7 +10,7 @@ const state: AuthState = {
 };
 
 // GETTERS
-function getToken(state: AuthState): string | null {
+function getAccessToken(state: AuthState): string | null {
   return state.access_token;
 }
 
@@ -19,7 +19,7 @@ function getRefreshToken(state: AuthState): string | null {
 }
 
 const getters = {
-  getToken,
+  getAccessToken,
   getRefreshToken,
 };
 
