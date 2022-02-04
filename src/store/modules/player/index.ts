@@ -2,7 +2,6 @@ import { Module, ActionContext } from "vuex";
 import { RootState } from "../../types";
 import { PlayerState } from "./types";
 import api from "@/api";
-import * as API from "@/types/API";
 
 const state: PlayerState = {
   player: null,
@@ -72,8 +71,9 @@ async function init({
   dispatch,
   rootGetters,
 }: ActionContext<PlayerState, RootState>): Promise<void> {
-  console.log("debug: player/init");
+  /* --- */ console.log("[debug] player/init (start)");
   const waitTransferComplete = async () => {
+    /* --- */ console.log("[debug] player/waitTransferComplete");
     return new Promise((resolve) => {
       const interval = setInterval(async () => {
         const playback_state: Spotify.PlaybackState | null =
@@ -129,17 +129,18 @@ async function init({
     console.log("Autoplay is not allowed by the browser autoplay rules");
   });
 
-  const connect = await api.spotify.SDK.connect(player);
+  await api.spotify.SDK.connect(player);
   await waitTransferComplete();
 
   dispatch("app/setStatus", "loaded", { root: true });
+  /* --- */ console.log("[debug] player/init (end)");
 }
 
 function setPlayer(
   { commit }: ActionContext<PlayerState, RootState>,
   player: Spotify.Player
 ): void {
-  console.log("debug: player/setPlayer: ", player);
+  /* --- */ console.log("[debug] player/setPlayer: ", player);
   commit("SET_PLAYER", player);
 }
 
@@ -147,7 +148,7 @@ function setDeviceId(
   { commit }: ActionContext<PlayerState, RootState>,
   device_id: string
 ): void {
-  console.log("debug: player/setDeviceId: ", device_id);
+  /* --- */ console.log("[debug] player/setDeviceId: ", device_id);
   commit("SET_DEVICE_ID", device_id);
 }
 
@@ -155,7 +156,7 @@ function setPlayback(
   { commit }: ActionContext<PlayerState, RootState>,
   playback: SpotifyApi.CurrentlyPlayingObject
 ): void {
-  console.log("debug: player/setPlayback: ", playback);
+  /* --- */ console.log("[debug] player/setPlayback: ", playback);
   commit("SET_PLAYBACK", playback);
 }
 
@@ -163,7 +164,7 @@ function setPlaybackState(
   { commit }: ActionContext<PlayerState, RootState>,
   playback_state: Spotify.PlaybackState
 ): void {
-  console.log("debug: player/setPlaybackState: ", playback_state);
+  /* --- */ console.log("[debug] player/setPlaybackState: ", playback_state);
   commit("SET_PLAYBACK_STATE", playback_state);
 }
 
