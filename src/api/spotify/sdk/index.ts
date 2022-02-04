@@ -15,19 +15,14 @@ export default {
     });
   },
 
-  connect(player: Spotify.Player): Promise<Spotify.WebPlaybackInstance> {
+  connect(player: Spotify.Player): Promise<boolean> {
     return new Promise((resolve) => {
-      player.addListener(
-        "ready",
-        (playback_instance: Spotify.WebPlaybackInstance) => {
-          // console.log('The Web Playback SDK is ready to play music!');
-          resolve(playback_instance);
-        }
-      );
-
       player.connect().then((success: boolean) => {
         if (success) {
-          // console.log("The Web Playback SDK successfully connected to Spotify!");
+          console.log(
+            "The Web Playback SDK successfully connected to Spotify!"
+          );
+          resolve(true);
         }
       });
     });

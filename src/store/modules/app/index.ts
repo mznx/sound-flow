@@ -7,40 +7,46 @@ const state: AppState = {
 };
 
 // GETTERS
-const getters = {};
+function getStatus(state: AppState): AppStatus {
+  return state.status;
+}
+
+const getters = {
+  getStatus,
+};
 
 // MUTATIONS
-function SET_STATE(state: AppState, status: AppStatus): void {
+function SET_STATUS(state: AppState, status: AppStatus): void {
   state.status = status;
 }
 
 const mutations = {
-  SET_STATE,
+  SET_STATUS,
 };
 
 // ACTIONS
-function init({
+async function init({
   dispatch,
-  rootGetters,
-}: ActionContext<AppState, RootState>): void {
-  dispatch("user/init", null, { root: true });
-  if (rootGetters["auth/getAccessToken"]) {
-    dispatch("player/init", null, { root: true });
-  } else {
-    dispatch("setState", "not-login");
-  }
+}: ActionContext<AppState, RootState>): Promise<void> {
+  /* --- */ console.log("[debug] app/init (start)");
+  await dispatch("auth/init", null, { root: true });
+  /* --- */ console.log("[debug] app/init (end)");
+  // if (rootGetters["auth/getAccessToken"]) {
+  //   dispatch("player/init", null, { root: true });
+  // }
 }
 
-function setState(
+function setStatus(
   { commit }: ActionContext<AppState, RootState>,
   status: AppStatus
 ): void {
-  commit("SET_STATE", status);
+  console.log("[debug] app/setStatus: ", status);
+  commit("SET_STATUS", status);
 }
 
 const actions = {
   init,
-  setState,
+  setStatus,
 };
 
 export const app: Module<AppState, RootState> = {

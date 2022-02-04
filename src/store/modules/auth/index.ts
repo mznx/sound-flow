@@ -41,20 +41,26 @@ const mutations = {
 async function init({
   dispatch,
 }: ActionContext<AuthState, RootState>): Promise<void> {
+  /* --- */ console.log("[debug] auth/init (start)");
+  dispatch("app/setStatus", "not-logged", { root: true });
   const access_token = localStorage.getItem("access_token");
   if (access_token) {
+    /* --- */ console.log("[debug] auth/init (check start)");
     const res: API.CheckToken = await api.backend.auth.checkToken(access_token);
+    /* --- */ console.log("[debug] auth/init (check end)");
     if (res.status === "ok") {
       dispatch("setAccessToken", access_token);
-      dispatch("app/setState", "logged");
+      dispatch("app/setStatus", "logged", { root: true });
     }
   }
+  /* --- */ console.log("[debug] auth/init (end)");
 }
 
 function setAccessToken(
   { commit }: ActionContext<AuthState, RootState>,
   access_token: string
 ): void {
+  console.log("[debug] auth/setAccessToken: ", access_token);
   commit("SET_ACCESS_TOKEN", access_token);
 }
 
