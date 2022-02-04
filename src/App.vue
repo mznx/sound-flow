@@ -1,19 +1,17 @@
 <template>
-  <router-view />
+  <router-view v-if="inited" />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { mapGetters, mapActions } from "vuex";
-import AppLayout from "@/layouts/AppLayout.vue";
 
 @Options({
-  components: {
-    AppLayout,
-  },
+  components: {},
 
   computed: {
     ...mapGetters({
+      inited: "app/getInitState",
       status: "app/getStatus",
     }),
   },
@@ -25,21 +23,7 @@ import AppLayout from "@/layouts/AppLayout.vue";
   },
 
   async created() {
-    await this.init();
-    /* --- */ console.log("[debug] status: ", this.status);
-    switch (this.status) {
-      case "logged":
-        /* --- */ console.log("[debug] log -> go home");
-        this.$router.push({ name: "Home" });
-        break;
-      case "not-logged":
-        /* --- */ console.log("[debug] no log -> go login");
-        this.$router.push({ name: "Login" });
-        break;
-      default:
-        /* --- */ console.log("[debug] default?");
-        break;
-    }
+    this.init();
   },
 })
 export default class App extends Vue {}

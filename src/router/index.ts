@@ -8,10 +8,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    components: {
-      default: Home,
-      homeRouter: NotFound,
-    },
+    component: Home,
+    children: [
+      {
+        path: "",
+        component: NotFound,
+      },
+    ],
   },
   {
     path: "/login",

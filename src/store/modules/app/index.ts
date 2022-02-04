@@ -3,24 +3,35 @@ import { RootState } from "../../types";
 import { AppStatus, AppState } from "./types";
 
 const state: AppState = {
+  inited: false,
   status: null,
 };
 
 // GETTERS
+function getInitState(state: AppState): boolean {
+  return state.inited;
+}
+
 function getStatus(state: AppState): AppStatus {
   return state.status;
 }
 
 const getters = {
+  getInitState,
   getStatus,
 };
 
 // MUTATIONS
+function SET_INIT_STATE(state: AppState, inited: boolean): void {
+  state.inited = inited;
+}
+
 function SET_STATUS(state: AppState, status: AppStatus): void {
   state.status = status;
 }
 
 const mutations = {
+  SET_INIT_STATE,
   SET_STATUS,
 };
 
@@ -30,22 +41,32 @@ async function init({
 }: ActionContext<AppState, RootState>): Promise<void> {
   /* --- */ console.log("[debug] app/init (start)");
   await dispatch("auth/init", null, { root: true });
+  dispatch("setInitState", true);
   /* --- */ console.log("[debug] app/init (end)");
   // if (rootGetters["auth/getAccessToken"]) {
   //   dispatch("player/init", null, { root: true });
   // }
 }
 
+function setInitState(
+  { commit }: ActionContext<AppState, RootState>,
+  inited: boolean
+): void {
+  /* --- */ console.log("[debug] app/setInitState: ", inited);
+  commit("SET_INIT_STATE", inited);
+}
+
 function setStatus(
   { commit }: ActionContext<AppState, RootState>,
   status: AppStatus
 ): void {
-  console.log("[debug] app/setStatus: ", status);
+  /* --- */ console.log("[debug] app/setStatus: ", status);
   commit("SET_STATUS", status);
 }
 
 const actions = {
   init,
+  setInitState,
   setStatus,
 };
 

@@ -1,6 +1,6 @@
 <template>
   <CircleLoader v-if="this.process" />
-  <div class="login">
+  <div class="login" ref="login">
     <h1>Пожалуйста, авторизуйтесь через Spotify.</h1>
     <button @click="login" class="btn">Войти</button>
   </div>
@@ -8,6 +8,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { mapGetters, mapActions } from "vuex";
 import CircleLoader from "@/components/CircleLoader/index.vue";
 import api from "@/api";
 import * as API from "@/types/API";
@@ -23,12 +24,28 @@ import * as API from "@/types/API";
     CircleLoader,
   },
 
+  computed: {
+    ...mapGetters({
+      status: "app/getStatus",
+    }),
+  },
+
   methods: {
+    ...mapActions({
+      setStatus: "app/setStatus",
+      setAccessToken: "auth/setAccessToken",
+      setRefreshToken: "auth/setRefreshToken",
+    }),
+
     popupEvent(event: MessageEvent) {
       const data = event.data;
       switch (data.status) {
         case "ok":
+          /* --- */ console.log("[debug] Login (all ok)");
           window.removeEventListener("message", this.popupEvent);
+          this.setAccessToken(localStorage.getItem("access_token"));
+          this.setRefreshToken(localStorage.getItem("refresh_token"));
+          this.setStatus("logged");
           this.$router.push({ name: "Home" });
           break;
         default:
@@ -38,15 +55,13 @@ import * as API from "@/types/API";
 
     async login() {
       // login process
-      const title: HTMLHeadingElement | null =
-        document.querySelector(".login h1");
-      const btn: HTMLButtonElement | null =
-        document.querySelector(".login button");
+      const title: HTMLHeadingElement =
+        this.$refs.login.querySelector(".login h1");
+      const btn: HTMLButtonElement =
+        this.$refs.login.querySelector(".login button");
 
-      if (title && btn) {
-        title.style.transform = "translateX(-100vw)";
-        btn.style.transform = "translateX(100vw)";
-      }
+      title.style.transform = "translateX(-100vw)";
+      btn.style.transform = "translateX(100vw)";
 
       this.process = true;
       const res: API.UserAuthURL = await api.backend.auth.getUserAuthURL();
@@ -63,22 +78,12 @@ import * as API from "@/types/API";
         }
       }
     },
-
-    async checkToken(): Promise<boolean> {
-      const token: string | null = localStorage.getItem("access_token");
-      if (token) {
-        const res: API.CheckToken = await api.backend.auth.checkToken(token);
-        if (res && res.status === "ok") return true;
-      }
-
-      return false;
-    },
   },
 
-  async mounted() {
-    // check token
-    const token_valid = await this.checkToken();
-    if (token_valid) this.$router.push({ name: "Home" });
+  created() {
+    /* --- */ console.log("[debug] Login (created)");
+    if (this.status === "logged" || this.status === "loaded")
+      this.$router.push({ name: "Home" });
   },
 })
 export default class Home extends Vue {}
