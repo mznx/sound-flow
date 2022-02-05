@@ -19,6 +19,7 @@
 import { Vue, Options } from "vue-class-component";
 import * as utils from "@/utils";
 import Slider from "@/components/Slider/index.vue";
+import api from "@/api";
 
 @Options({
   props: {
@@ -61,8 +62,8 @@ import Slider from "@/components/Slider/index.vue";
       }
     },
 
-    onProgressChange() {
-      this.player.seek(this.progress);
+    async onProgressChange() {
+      await api.spotify.SDK.seek(this.player, this.progress);
     },
 
     getTime(value: number) {

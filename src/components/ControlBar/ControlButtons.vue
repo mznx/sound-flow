@@ -72,19 +72,19 @@ import api from "@/api";
   },
 
   methods: {
-    playPause() {
+    async playPause() {
       //
-      this.player.togglePlay();
+      await api.spotify.SDK.togglePlay(this.player);
     },
 
-    previousTrack() {
+    async previousTrack() {
       //
-      this.player.previousTrack();
+      await api.spotify.SDK.previousTrack(this.player);
     },
 
-    nextTrack() {
+    async nextTrack() {
       //
-      this.player.nextTrack();
+      await api.spotify.SDK.nextTrack(this.player);
     },
 
     toggleShuffle() {
