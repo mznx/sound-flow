@@ -86,6 +86,11 @@ async function init({
     });
   };
 
+  const script = document.createElement("script");
+  script.src = "https://sdk.scdn.co/spotify-player.js";
+  script.async = true;
+  document.body.appendChild(script);
+
   const access_token = rootGetters["auth/getAccessToken"];
   const player = await api.spotify.SDK.init(access_token);
 

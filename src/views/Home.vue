@@ -31,23 +31,21 @@ import ControlBar from "@/components/ControlBar/index.vue";
 
   methods: {
     ...mapActions({
-      init: "player/init",
+      playerInit: "player/init",
     }),
   },
 
   created() {
     /* --- */ console.log("[debug] Home (created)");
-    if (this.status === "not-logged" || this.status === "loaded") {
+    if (this.status === "not-logged") {
       this.$router.push({ name: "Login" });
       return;
     }
 
     // player.init
-    const script = document.createElement("script");
-    script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
-    document.body.appendChild(script);
-    this.init();
+    if (this.status !== "loaded") {
+      this.playerInit();
+    }
   },
 })
 export default class Home extends Vue {}
