@@ -21,6 +21,11 @@ import * as utils from "@/utils";
 import Slider from "@/components/Slider/index.vue";
 
 @Options({
+  props: {
+    player: Object,
+    playback_state: Object,
+  },
+
   data() {
     return {
       progress: 0,
@@ -28,23 +33,26 @@ import Slider from "@/components/Slider/index.vue";
       inverval: null,
     };
   },
+
   components: {
     Slider,
   },
+
   computed: {
     is_playing: function (): boolean {
-      return this.$store.state.player.playback_state.paused;
+      return this.playback_state.paused;
     },
     context: function () {
-      return this.$store.state.player.playback_state.context;
+      return this.playback_state.context;
     },
   },
+
   methods: {
     updateProgress() {
       clearInterval(this.inverval);
-      this.progress = this.$store.state.player.playback_state.position;
+      this.progress = this.playback_state.position;
 
-      if (!this.$store.state.player.playback_state.paused) {
+      if (!this.playback_state.paused) {
         this.inverval = setInterval(() => {
           if (this.progress + 1000 <= this.duration) {
             this.progress += 1000;
@@ -54,24 +62,26 @@ import Slider from "@/components/Slider/index.vue";
     },
 
     onProgressChange() {
-      this.$store.state.player.player.seek(this.progress);
+      this.player.seek(this.progress);
     },
 
     getTime(value: number) {
       return utils.msToTime(value);
     },
   },
+
   watch: {
     context() {
-      this.duration = this.$store.state.player.playback_state.duration;
-      this.progress = this.$store.state.player.playback_state.position;
+      this.duration = this.playback_state.duration;
+      this.progress = this.playback_state.position;
     },
     is_playing() {
       this.updateProgress();
     },
   },
-  mounted() {
-    this.duration = this.$store.state.player.playback_state.duration;
+
+  created() {
+    this.duration = this.playback_state.duration;
     this.updateProgress();
   },
 })

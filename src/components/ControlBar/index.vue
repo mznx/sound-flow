@@ -3,7 +3,7 @@
     <div class="cb-left"></div>
     <div class="cb-center">
       <ControlButtons />
-      <ControlPlayback />
+      <ControlPlayback :player="player" :playback_state="playback_state" />
     </div>
     <div class="cb-right"></div>
   </div>
@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import { mapGetters } from "vuex";
 import ControlButtons from "./ControlButtons.vue";
 import ControlPlayback from "./ControlPlayback.vue";
 
@@ -18,6 +19,13 @@ import ControlPlayback from "./ControlPlayback.vue";
   components: {
     ControlButtons,
     ControlPlayback,
+  },
+
+  computed: {
+    ...mapGetters({
+      player: "player/getPlayer",
+      playback_state: "player/getPlaybackState",
+    }),
   },
 })
 export default class ControlBar extends Vue {}
