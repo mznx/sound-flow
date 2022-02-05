@@ -1,6 +1,8 @@
 <template>
   <div class="control-bar">
-    <div class="cb-left"></div>
+    <div class="cb-left">
+      <ControlCurrentTrack :player="player" :playback_state="playback_state" />
+    </div>
     <div class="cb-center">
       <ControlButtons
         :player="player"
@@ -21,12 +23,14 @@ import { mapGetters } from "vuex";
 import ControlButtons from "./ControlButtons.vue";
 import ControlPlayback from "./ControlPlayback.vue";
 import ControlVolume from "./ControlVolume.vue";
+import ControlCurrentTrack from "./ControlCurrentTrack.vue";
 
 @Options({
   components: {
     ControlButtons,
     ControlPlayback,
     ControlVolume,
+    ControlCurrentTrack,
   },
 
   computed: {
@@ -51,11 +55,15 @@ export default class ControlBar extends Vue {}
   flex-shrink: 0;
   background-color: var(--color-fg);
   border-top: 1px solid #594d7e;
+  padding: 8px 10px;
 }
 
 .cb-left {
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .cb-center {
@@ -64,7 +72,6 @@ export default class ControlBar extends Vue {}
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 4px 0;
 }
 
 .cb-right {
@@ -73,7 +80,5 @@ export default class ControlBar extends Vue {}
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 4px 0;
-  padding-right: 10px;
 }
 </style>
