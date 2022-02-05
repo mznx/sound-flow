@@ -9,7 +9,9 @@
       />
       <ControlPlayback :player="player" :playback_state="playback_state" />
     </div>
-    <div class="cb-right"></div>
+    <div class="cb-right">
+      <ControlVolume :player="player" :playback_state="playback_state" />
+    </div>
   </div>
 </template>
 
@@ -18,11 +20,13 @@ import { Vue, Options } from "vue-class-component";
 import { mapGetters } from "vuex";
 import ControlButtons from "./ControlButtons.vue";
 import ControlPlayback from "./ControlPlayback.vue";
+import ControlVolume from "./ControlVolume.vue";
 
 @Options({
   components: {
     ControlButtons,
     ControlPlayback,
+    ControlVolume,
   },
 
   computed: {
@@ -66,5 +70,10 @@ export default class ControlBar extends Vue {}
 .cb-right {
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 4px 0;
+  padding-right: 10px;
 }
 </style>
