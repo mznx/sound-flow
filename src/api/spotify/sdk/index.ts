@@ -32,15 +32,27 @@ export default {
     player.disconnect();
   },
 
-  togglePlay(player: Spotify.Player): void {
-    player.togglePlay();
+  togglePlay(player: Spotify.Player): Promise<void> {
+    return player.togglePlay();
   },
 
-  previousTrack(player: Spotify.Player): void {
-    player.previousTrack();
+  previousTrack(player: Spotify.Player): Promise<void> {
+    return player.previousTrack();
   },
 
-  nextTrack(player: Spotify.Player): void {
-    player.nextTrack();
+  nextTrack(player: Spotify.Player): Promise<void> {
+    return player.nextTrack();
+  },
+
+  seek(player: Spotify.Player, ms: number): Promise<void> {
+    return player.seek(ms);
+  },
+
+  getVolume(player: Spotify.Player): Promise<number> {
+    return player.getVolume();
+  },
+
+  setVolume(player: Spotify.Player, volume: number): Promise<void> {
+    return player.setVolume(volume);
   },
 };
