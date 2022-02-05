@@ -4,6 +4,7 @@ import { RootState } from "./types";
 import { app } from "./modules/app/";
 import { auth } from "./modules/auth/";
 import { player } from "./modules/player/";
+import { user } from "./modules/user/";
 
 export default createStore<RootState>({
   state: {},
@@ -13,5 +14,6 @@ export default createStore<RootState>({
     app,
     auth,
     player,
+    user,
   },
 });

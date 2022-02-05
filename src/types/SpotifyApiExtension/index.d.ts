@@ -299,4 +299,15 @@ declare namespace SpotifyApi {
     uri: string;
     device_id?: string;
   }
+
+  // -----
+  interface ExplicitContent {
+    filter_enabled: boolean;
+    filter_locked: boolean;
+  }
+
+  interface UserObjectPrivate {
+    birthdate?: string;
+    explicit_content?: ExplicitContent;
+  }
 }
