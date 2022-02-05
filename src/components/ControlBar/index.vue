@@ -2,7 +2,11 @@
   <div class="control-bar">
     <div class="cb-left"></div>
     <div class="cb-center">
-      <ControlButtons />
+      <ControlButtons
+        :player="player"
+        :device_id="device_id"
+        :playback_state="playback_state"
+      />
       <ControlPlayback :player="player" :playback_state="playback_state" />
     </div>
     <div class="cb-right"></div>
@@ -24,6 +28,7 @@ import ControlPlayback from "./ControlPlayback.vue";
   computed: {
     ...mapGetters({
       player: "player/getPlayer",
+      device_id: "player/getDeviceId",
       playback_state: "player/getPlaybackState",
     }),
   },

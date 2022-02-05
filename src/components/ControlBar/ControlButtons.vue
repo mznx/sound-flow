@@ -2,7 +2,7 @@
   <div class="cb-buttons">
     <button
       class="cb-shuffle"
-      :class="{ active: this.$store.state.player.playback_state.shuffle }"
+      :class="{ active: this.playback_state.shuffle }"
       @click="toggleShuffle"
     >
       <inline-svg
@@ -22,7 +22,7 @@
 
     <button class="cb-playpause" @click="playPause">
       <inline-svg
-        v-if="this.$store.state.player.playback_state.paused"
+        v-if="this.playback_state.paused"
         :src="require('@/assets/icons/control-play.svg')"
         width="35"
         height="35"
@@ -46,8 +46,8 @@
     <button
       class="cb-repeat"
       :class="[
-        { active: this.$store.state.player.playback_state.repeat_mode !== 0 },
-        { track: this.$store.state.player.playback_state.repeat_mode === 2 },
+        { active: this.playback_state.repeat_mode !== 0 },
+        { track: this.playback_state.repeat_mode === 2 },
       ]"
       @click="toggleRepeatMode"
     >
@@ -65,35 +65,38 @@ import { Vue, Options } from "vue-class-component";
 import api from "@/api";
 
 @Options({
-  data() {
-    return {};
+  props: {
+    player: Object,
+    device_id: String,
+    playback_state: Object,
   },
+
   methods: {
     playPause() {
       //
-      api.spotify.SDK.togglePlay(this.$store.state.player.player);
+      this.player.togglePlay();
     },
 
     previousTrack() {
       //
-      api.spotify.SDK.previousTrack(this.$store.state.player.player);
+      this.player.previousTrack();
     },
 
     nextTrack() {
       //
-      api.spotify.SDK.nextTrack(this.$store.state.player.player);
+      this.player.nextTrack();
     },
 
     toggleShuffle() {
       api.spotify.player.togglePlaybackShuffle({
-        state: !this.$store.state.player.playback_state.shuffle,
-        device_id: this.$store.state.player.device_id,
+        state: !this.playback_state.shuffle,
+        device_id: this.device_id,
       });
     },
 
     toggleRepeatMode() {
       let repeat_mode = "";
-      switch (this.$store.state.player.playback_state.repeat_mode) {
+      switch (this.playback_state.repeat_mode) {
         case 0:
           repeat_mode = "context";
           break;
@@ -107,7 +110,7 @@ import api from "@/api";
 
       api.spotify.player.setRepeatMode({
         state: repeat_mode,
-        device_id: this.$store.state.player.device_id,
+        device_id: this.device_id,
       });
     },
   },
