@@ -2,11 +2,20 @@
   <div class="cb-track">
     <img :src="track_image" />
     <div class="cb-track-info">
-      <p class="cb-track-name">{{ track_name }}</p>
+      <router-link :to="album_link" class="cb-track-name">
+        {{ track_name }}
+      </router-link>
       <div class="cb-track-artists">
-        <p v-for="(art, i) in track_artists" :key="art">
-          <span v-if="i > 0">, </span>{{ art.name }}
-        </p>
+        <span
+          v-for="(art, i) in track_artists"
+          :key="art"
+          class="cb-track-artist"
+        >
+          <span v-if="i > 0">, </span>
+          <router-link :to="'/artist/' + spotifyUriParse(art.uri).val">
+            {{ art.name }}
+          </router-link>
+        </span>
       </div>
     </div>
   </div>
@@ -23,9 +32,11 @@ import { Vue, Options } from "vue-class-component";
 
   data() {
     return {
-      track_image: "",
+      album_id: "",
+      album_link: "",
       track_name: "",
       track_artists: [],
+      track_image: "",
     };
   },
 
@@ -35,21 +46,45 @@ import { Vue, Options } from "vue-class-component";
     },
   },
 
+  methods: {
+    spotifyUriParse(uri: string) {
+      const uri_arr = uri.split(":");
+      return {
+        type: uri_arr[1],
+        val: uri_arr[2],
+      };
+    },
+
+    getTrackAlbumId(track: Spotify.Track): string {
+      const uri = track.album.uri;
+      const spotify_uri_obj = this.spotifyUriParse(uri);
+      return spotify_uri_obj.val;
+    },
+
+    getTrackMinImageUrl(track: Spotify.Track) {
+      const track_images = track.album.images;
+      let url = "";
+      if (track_images[0].height) {
+        let min_size: number = track_images[0].height;
+        track_images.forEach((img: Spotify.Image) => {
+          if (img.height && img.height <= min_size) {
+            url = img.url;
+            min_size = img.height;
+          }
+        });
+      }
+      return url;
+    },
+  },
+
   watch: {
     context() {
       const track = this.playback_state.track_window.current_track;
+      this.album_id = this.getTrackAlbumId(track);
+      this.album_link = "/album/" + this.album_id;
       this.track_name = track.name;
       this.track_artists = track.artists;
-      const track_images = track.album.images;
-      let image = "";
-      let min_size = track_images[0].height;
-      track_images.forEach((img: Spotify.Image) => {
-        if (img.height && img.height <= min_size) {
-          image = img.url;
-          min_size = img.height;
-        }
-      });
-      this.track_image = image;
+      this.track_image = this.getTrackMinImageUrl(track);
     },
   },
 })
@@ -61,10 +96,10 @@ export default class ControlCurrentTrack extends Vue {}
   width: 100%;
   height: 100%;
   display: flex;
-  color: var(--color-text);
 
   img {
     height: 100%;
+    border-radius: 4px;
   }
 }
 
@@ -76,13 +111,32 @@ export default class ControlCurrentTrack extends Vue {}
 }
 
 .cb-track-name {
+  color: var(--color-text);
   font-size: 10pt;
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 }
 
 .cb-track-artists {
-  p {
+  .cb-track-artist {
+    color: #999;
     display: inline-block;
     font-size: 8pt;
+
+    a {
+      color: #999;
+      text-decoration: none;
+
+      &:hover {
+        cursor: pointer;
+        color: var(--color-text);
+        text-decoration: underline;
+      }
+    }
   }
 }
 </style>
