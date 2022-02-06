@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import Login from "@/views/Login.vue";
 import Callback from "@/views/Callback.vue";
 import NotFound from "@/views/NotFound.vue";
+import Album from "@/views/Album/index.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,6 +14,10 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "",
         component: NotFound,
+      },
+      {
+        path: "album/:id",
+        component: Album,
       },
     ],
   },
