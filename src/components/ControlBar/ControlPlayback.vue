@@ -67,7 +67,7 @@ import api from "@/api";
     },
 
     getTime(value: number) {
-      return utils.msToTime(value);
+      return utils.msToTime(value, false);
     },
   },
 

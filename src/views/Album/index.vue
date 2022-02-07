@@ -4,7 +4,7 @@
       <img :src="album_image" />
       <span>
         <span>{{ album.total_tracks }} songs, </span>
-        <span>{{ msToTime(album_duration) }}</span>
+        <span>{{ msToTime(album_duration, true) }}</span>
       </span>
     </div>
     <div class="album-playlist">
@@ -16,8 +16,8 @@
             {{ art.name }}
           </router-link>
         </span>
-        <TrackList :tracks="album.tracks" />
       </div>
+      <TrackList :tracks="album.tracks" />
     </div>
   </div>
 </template>
@@ -25,6 +25,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import TrackList from "@/components/TrackList/index.vue";
+import * as utils from "@/utils";
 import api from "@/api";
 
 @Options({
@@ -57,18 +58,8 @@ import api from "@/api";
     },
 
     getAlbumMaxImageUrl(album: SpotifyApi.AlbumObjectFull) {
-      const album_images = album.images;
-      let url = "";
-      if (album_images[0].height) {
-        let max_size: number = album_images[0].height;
-        album_images.forEach((alb: SpotifyApi.ImageObject) => {
-          if (alb.height && alb.height >= max_size) {
-            url = alb.url;
-            max_size = alb.height;
-          }
-        });
-      }
-      return url;
+      const album_images: Spotify.Image[] = album.images;
+      return utils.getImageUrl(album_images, true);
     },
 
     getAlbumDuration(album: SpotifyApi.AlbumObjectFull) {
@@ -80,19 +71,8 @@ import api from "@/api";
       return duration;
     },
 
-    msToTime(ms: number) {
-      const h = Math.trunc(ms / 3600000);
-      const m = Math.trunc((ms - h * 3600000) / 60000);
-      const s = Math.trunc((ms - h * 3600000 - m * 60000) / 1000);
-
-      let time = "";
-      if (h) time += h + "h";
-      if (m < 10) time += ` 0${m}m`;
-      else time += ` ${m}m`;
-      if (s < 10) time += ` 0${s}s`;
-      else time += ` ${s}s`;
-
-      return time;
+    msToTime(ms: number, format: boolean) {
+      return utils.msToTime(ms, format);
     },
 
     async setAlbumParams() {
@@ -134,6 +114,7 @@ export default class Album extends Vue {}
 
   img {
     border-radius: 15px;
+    box-shadow: 0 0 8px -4px;
   }
 }
 

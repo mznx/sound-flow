@@ -23,6 +23,7 @@
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import * as utils from "@/utils";
 
 @Options({
   props: {
@@ -62,18 +63,8 @@ import { Vue, Options } from "vue-class-component";
     },
 
     getTrackMinImageUrl(track: Spotify.Track) {
-      const track_images = track.album.images;
-      let url = "";
-      if (track_images[0].height) {
-        let min_size: number = track_images[0].height;
-        track_images.forEach((img: Spotify.Image) => {
-          if (img.height && img.height <= min_size) {
-            url = img.url;
-            min_size = img.height;
-          }
-        });
-      }
-      return url;
+      const track_images: Spotify.Image[] = track.album.images;
+      return utils.getImageUrl(track_images, false);
     },
   },
 

@@ -3,17 +3,24 @@
     <div v-for="(track, i) in tracks.items" :key="track" class="track-list-row">
       <span>{{ i + 1 }}</span>
       <span>{{ track.name }}</span>
-      <span>{{ track.duration_ms }}</span>
+      <span>{{ msToTime(track.duration_ms, false) }}</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import * as utils from "@/utils";
 
 @Options({
   props: {
     tracks: Object,
+  },
+
+  methods: {
+    msToTime(ms: number, format: boolean) {
+      return utils.msToTime(ms, format);
+    },
   },
 })
 export default class TrackList extends Vue {}
