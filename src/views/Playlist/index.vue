@@ -21,7 +21,7 @@
           </router-link>
         </span>
       </div>
-      <TrackList :tracks="tracks" />
+      <TrackList :tracks="tracks" :context_uri="context_uri" />
     </div>
   </div>
 </template>
@@ -40,6 +40,7 @@ import api from "@/api";
       playlist_image: "",
       playlist_duration: 0,
       tracks: [],
+      context_uri: "",
     };
   },
 
@@ -94,10 +95,13 @@ import api from "@/api";
 
     async setPlaylistParams() {
       this.playlist = await api.spotify.playlists.getPlaylist({
-        playlist_id: this.playlist_id,
+        params: {
+          playlist_id: this.playlist_id,
+        },
       });
       this.playlist_image = this.getPlaylistMaxImageUrl(this.playlist);
       this.playlist_duration = this.getPlaylistDuration(this.playlist);
+      this.context_uri = this.playlist.uri;
       this.getTracks();
       this.loaded = true;
     },
