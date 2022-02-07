@@ -1,9 +1,11 @@
 <template>
   <div class="track-list">
     <div v-for="(track, i) in tracks.items" :key="track" class="track-list-row">
-      <span>{{ i + 1 }}</span>
-      <span>{{ track.name }}</span>
-      <span>{{ msToTime(track.duration_ms, false) }}</span>
+      <span class="track-list-num">{{ i + 1 }}</span>
+      <span class="track-list-name">{{ track.name }}</span>
+      <span class="track-list-duration">{{
+        msToTime(track.duration_ms, false)
+      }}</span>
     </div>
   </div>
 </template>
@@ -46,8 +48,20 @@ export default class TrackList extends Vue {}
   }
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
     cursor: pointer;
   }
+}
+
+.track-list-num {
+  color: #999;
+}
+
+.track-list-name {
+  color: var(--color-text);
+}
+
+.track-list-duration {
+  color: #999;
 }
 </style>
