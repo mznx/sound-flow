@@ -38,7 +38,7 @@ export function getImageUrl(
   images: Spotify.Image[],
   find_max: boolean
 ): string {
-  let url = "";
+  let url = images[0].url;
   if (images[0].height) {
     let curr_size: number = images[0].height;
     images.forEach((img: Spotify.Image) => {
