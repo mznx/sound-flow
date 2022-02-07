@@ -17,7 +17,7 @@
           </router-link>
         </span>
       </div>
-      <TrackList :tracks="album.tracks" />
+      <TrackList :tracks="tracks" />
     </div>
   </div>
 </template>
@@ -35,6 +35,7 @@ import api from "@/api";
       album: null,
       album_image: "",
       album_duration: 0,
+      tracks: [],
     };
   },
 
@@ -79,6 +80,15 @@ import api from "@/api";
       this.album = await api.spotify.albums.getAlbum({ id: this.album_id });
       this.album_image = this.getAlbumMaxImageUrl(this.album);
       this.album_duration = this.getAlbumDuration(this.album);
+      const tracks = this.album.tracks.items;
+      tracks.forEach((track: SpotifyApi.TrackObjectFull) => {
+        const t = {
+          name: track.name,
+          duration: utils.msToTime(track.duration_ms, false),
+          image: "",
+        };
+        this.tracks.push(t);
+      });
       this.loaded = true;
     },
   },

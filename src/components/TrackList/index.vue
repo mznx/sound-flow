@@ -1,11 +1,12 @@
 <template>
   <div class="track-list">
-    <div v-for="(track, i) in tracks.items" :key="track" class="track-list-row">
+    <div v-for="(track, i) in tracks" :key="i" class="track-list-row">
       <span class="track-list-num">{{ i + 1 }}</span>
-      <span class="track-list-name">{{ track.name }}</span>
-      <span class="track-list-duration">{{
-        msToTime(track.duration_ms, false)
-      }}</span>
+      <span class="track-list-general">
+        <img :src="track.image" class="track-list-img" />
+        <span class="track-list-name">{{ track.name }}</span>
+      </span>
+      <span class="track-list-duration">{{ track.duration }}</span>
     </div>
   </div>
 </template>
@@ -19,10 +20,20 @@ import * as utils from "@/utils";
     tracks: Object,
   },
 
+  data() {
+    return {
+      images: [],
+    };
+  },
+
   methods: {
     msToTime(ms: number, format: boolean) {
       return utils.msToTime(ms, format);
     },
+  },
+
+  created() {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!tracks: ", this.tracks);
   },
 })
 export default class TrackList extends Vue {}
@@ -36,16 +47,11 @@ export default class TrackList extends Vue {}
 .track-list-row {
   height: 50px;
   display: grid;
-  grid-template-columns: 30px 1fr 1fr;
+  grid-template-columns: 16px 1fr 1fr;
+  grid-gap: 16px;
   align-items: center;
   border-radius: 4px;
-  padding: 0 10px;
-
-  span {
-    &:last-child {
-      text-align: right;
-    }
-  }
+  padding: 0 16px;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.05);
@@ -55,13 +61,31 @@ export default class TrackList extends Vue {}
 
 .track-list-num {
   color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.track-list-general {
+  color: var(--color-text);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.track-list-img {
+  height: 40px;
+  margin-right: 16px;
 }
 
 .track-list-name {
-  color: var(--color-text);
+  //
 }
 
 .track-list-duration {
   color: #999;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 </style>
