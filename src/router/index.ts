@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import Home from "../views/Home.vue";
+import AppLayout from "@/layouts/AppLayout.vue";
+import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
 import Callback from "@/views/Callback.vue";
 import NotFound from "@/views/NotFound.vue";
@@ -9,11 +10,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: AppLayout,
     children: [
       {
         path: "",
-        component: NotFound,
+        component: Home,
       },
       {
         path: "album/:id",
