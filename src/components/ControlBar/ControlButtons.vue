@@ -89,8 +89,10 @@ import api from "@/api";
 
     toggleShuffle() {
       api.spotify.player.togglePlaybackShuffle({
-        state: !this.playback_state.shuffle,
-        device_id: this.device_id,
+        query: {
+          state: !this.playback_state.shuffle,
+          device_id: this.device_id,
+        },
       });
     },
 
@@ -109,8 +111,10 @@ import api from "@/api";
       }
 
       api.spotify.player.setRepeatMode({
-        state: repeat_mode,
-        device_id: this.device_id,
+        query: {
+          state: repeat_mode,
+          device_id: this.device_id,
+        },
       });
     },
   },

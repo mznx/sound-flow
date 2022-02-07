@@ -117,7 +117,7 @@ async function init({
     dispatch("setPlayer", player);
     dispatch("setDeviceId", device_id);
     api.spotify.player.transferPlayback({
-      device_ids: [device_id],
+      body: { device_ids: [device_id] },
     });
   });
 

@@ -4,9 +4,9 @@ import request from "../request";
 
 export default {
   search(
-    opts: SpotifyApi.SearchForItemParameterObject
+    opts: SpotifyApi.SearchParameterObject
   ): Promise<SpotifyApi.SearchResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/search?${query}`,

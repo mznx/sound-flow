@@ -8,7 +8,7 @@ export default {
   ): Promise<SpotifyApi.SingleArtistResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "GET",
-      path: `/artists/${opts.id}`,
+      path: `/artists/${opts.params.id}`,
     };
     return request<SpotifyApi.SingleArtistResponse>(req_options);
   },
@@ -16,7 +16,7 @@ export default {
   getArtists(
     opts: SpotifyApi.GetArtistsParameterObject
   ): Promise<SpotifyApi.MultipleArtistsResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/artists?${query}`,
@@ -27,21 +27,21 @@ export default {
   getArtisAlbums(
     opts: SpotifyApi.GetArtistAlbumsParameterObject
   ): Promise<SpotifyApi.ArtistsAlbumsResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
-      path: `/artists/${opts.id}/albums?${query}`,
+      path: `/artists/${opts.params.id}/albums?${query}`,
     };
     return request<SpotifyApi.ArtistsAlbumsResponse>(req_options);
   },
 
   getArtisTopTracks(
-    opts: SpotifyApi.GetArtisTopTracksParameterObject
+    opts: SpotifyApi.GetArtistTopTracksParameterObject
   ): Promise<SpotifyApi.ArtistsTopTracksResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
-      path: `/artists/${opts.id}/top-tracks?${query}`,
+      path: `/artists/${opts.params.id}/top-tracks?${query}`,
     };
     return request<SpotifyApi.ArtistsTopTracksResponse>(req_options);
   },
@@ -51,7 +51,7 @@ export default {
   ): Promise<SpotifyApi.ArtistsRelatedArtistsResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "GET",
-      path: `/artists/${opts.id}/related-artists`,
+      path: `/artists/${opts.params.id}/related-artists`,
     };
     return request<SpotifyApi.ArtistsRelatedArtistsResponse>(req_options);
   },

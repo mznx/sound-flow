@@ -77,7 +77,9 @@ import api from "@/api";
     },
 
     async setAlbumParams() {
-      this.album = await api.spotify.albums.getAlbum({ id: this.album_id });
+      this.album = await api.spotify.albums.getAlbum({
+        params: { id: this.album_id },
+      });
       this.album_image = this.getAlbumMaxImageUrl(this.album);
       this.album_duration = this.getAlbumDuration(this.album);
       const tracks = this.album.tracks.items;

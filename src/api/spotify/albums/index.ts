@@ -6,10 +6,10 @@ export default {
   getAlbum(
     opts: SpotifyApi.GetAlbumParameterObject
   ): Promise<SpotifyApi.SingleAlbumResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
-      path: `/albums/${opts.id}?${query}`,
+      path: `/albums/${opts.params.id}?${query}`,
     };
     return request<SpotifyApi.SingleAlbumResponse>(req_options);
   },
@@ -17,7 +17,7 @@ export default {
   getAlbums(
     opts: SpotifyApi.GetAlbumsParameterObject
   ): Promise<SpotifyApi.MultipleAlbumsResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/albums?${query}`,
@@ -28,10 +28,10 @@ export default {
   getAlbumsTracks(
     opts: SpotifyApi.GetAlbumsTracksParameterObject
   ): Promise<SpotifyApi.AlbumTracksResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
-      path: `/albums/${opts.id}/tracks?${query}`,
+      path: `/albums/${opts.params.id}/tracks?${query}`,
     };
     return request<SpotifyApi.AlbumTracksResponse>(req_options);
   },
@@ -39,7 +39,7 @@ export default {
   getSavedAlbums(
     opts: SpotifyApi.GetSavedAlbumsParameterObject
   ): Promise<SpotifyApi.UsersSavedAlbumsResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/me/albums?${query}`,
@@ -53,7 +53,7 @@ export default {
     const req_options: API.Request = {
       method: "PUT",
       path: "/me/albums",
-      body: JSON.stringify(opts),
+      body: JSON.stringify(opts.body),
     };
     return request(req_options);
   },
@@ -64,7 +64,7 @@ export default {
     const req_options: API.Request = {
       method: "DELETE",
       path: "/me/albums",
-      body: JSON.stringify(opts),
+      body: JSON.stringify(opts.body),
     };
     return request(req_options);
   },
@@ -72,7 +72,7 @@ export default {
   checkSavedAlbums(
     opts: SpotifyApi.CheckSavedAlbumsParameterObject
   ): Promise<SpotifyApi.CheckUserSavedAlbumsResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/me/albums/contains?${query}`,
@@ -83,7 +83,7 @@ export default {
   getNewReleases(
     opts: SpotifyApi.getNewReleasesParameterObject
   ): Promise<SpotifyApi.ListOfNewReleasesResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/browse/new-releases?${query}`,

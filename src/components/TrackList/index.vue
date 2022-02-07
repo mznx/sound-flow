@@ -1,9 +1,9 @@
 <template>
   <div class="track-list">
     <div v-for="(track, i) in tracks" :key="i" class="track-list-row">
-      <span class="track-list-num">{{ i + 1 }}</span>
+      <span class="track-list-num" :click="startTrack(i)">{{ i + 1 }}</span>
       <span class="track-list-general">
-        <img :src="track.image" class="track-list-img" />
+        <img v-if="track.image" :src="track.image" class="track-list-img" />
         <span class="track-list-name">{{ track.name }}</span>
       </span>
       <span class="track-list-duration">{{ track.duration }}</span>
@@ -14,10 +14,13 @@
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
 import * as utils from "@/utils";
+import api from "@/api";
+import * as API from "@/types/API";
 
 @Options({
   props: {
     tracks: Object,
+    context_uri: String,
   },
 
   data() {
@@ -30,10 +33,19 @@ import * as utils from "@/utils";
     msToTime(ms: number, format: boolean) {
       return utils.msToTime(ms, format);
     },
+
+    startTrack(offset: number) {
+      api.spotify.player.startPlayback({
+        body: {
+          context_uri: this.context_uri,
+          offset: { position: offset },
+        },
+      });
+    },
   },
 
   created() {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!tracks: ", this.tracks);
+    console.log("[debug] TrackList (created) tracks:", this.tracks);
   },
 })
 export default class TrackList extends Vue {}

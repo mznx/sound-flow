@@ -8,6 +8,16 @@ export function paramObjToQueryStr<T>(opts: T): string {
   return result;
 }
 
+export function queryObjToStr<T>(query: T): string {
+  let result = "";
+
+  JSON.parse(JSON.stringify(query), (key, val) => {
+    result += `${key}=${val}&`;
+  });
+
+  return result;
+}
+
 export function msToTime(ms: number, format: boolean): string {
   const h = Math.trunc(ms / 3600000);
   const m = Math.trunc((ms - h * 3600000) / 60000);
