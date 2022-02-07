@@ -16,7 +16,7 @@ export default {
   getUserTopArtists(
     opts: SpotifyApi.GetUserTopArtistsParameterObject
   ): Promise<SpotifyApi.UsersTopArtistsResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/me/top/artists?${query}`,
@@ -27,7 +27,7 @@ export default {
   getUserTopTracks(
     opts: SpotifyApi.GetUserTopTracksParameterObject
   ): Promise<SpotifyApi.UsersTopTracksResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/me/top/tracks?${query}`,
@@ -40,7 +40,7 @@ export default {
   ): Promise<SpotifyApi.UserProfileResponse | API.NullOrError> {
     const req_options: API.Request = {
       method: "GET",
-      path: `/users/${opts.user_id}`,
+      path: `/users/${opts.params.user_id}`,
     };
     return request<SpotifyApi.UserProfileResponse>(req_options);
   },
@@ -50,7 +50,7 @@ export default {
   ): Promise<API.NullOrError> {
     const req_options: API.Request = {
       method: "PUT",
-      path: `/playlists/${opts.playlist_id}/followers`,
+      path: `/playlists/${opts.params.playlist_id}/followers`,
       body: JSON.stringify(opts),
     };
     return request(req_options);
@@ -61,7 +61,7 @@ export default {
   ): Promise<API.NullOrError> {
     const req_options: API.Request = {
       method: "DELETE",
-      path: `/playlists/${opts.playlist_id}/followers`,
+      path: `/playlists/${opts.params.playlist_id}/followers`,
     };
     return request(req_options);
   },
@@ -69,7 +69,7 @@ export default {
   getFollowedArtists(
     opts: SpotifyApi.GetFollowedArtistsParameterObject
   ): Promise<SpotifyApi.UsersFollowedArtistsResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/me/following?${query}`,
@@ -80,7 +80,7 @@ export default {
   followArtistsOrUsers(
     opts: SpotifyApi.FollowArtistsOrUsersParameterObject
   ): Promise<SpotifyApi.FollowArtistsOrUsersResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "PUT",
       path: `/me/following?${query}`,
@@ -91,7 +91,7 @@ export default {
   unfollowArtistsOrUsers(
     opts: SpotifyApi.UnfollowArtistsOrUsersParameterObject
   ): Promise<SpotifyApi.UnfollowArtistsOrUsersResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "DELETE",
       path: `/me/following?${query}`,
@@ -102,7 +102,7 @@ export default {
   checkUserFollowArtistsOrUsers(
     opts: SpotifyApi.CheckUserFollowArtistsOrUsersParameterObject
   ): Promise<SpotifyApi.UserFollowsUsersOrArtistsResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/me/following/contains?${query}`,
@@ -113,10 +113,10 @@ export default {
   checkUsersFollowPlaylist(
     opts: SpotifyApi.CheckUsersFollowPlaylistParameterObject
   ): Promise<SpotifyApi.UsersFollowPlaylistResponse | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
-      path: `/playlists/${opts.playlist_id}/followers/contains?${query}`,
+      path: `/playlists/${opts.params.playlist_id}/followers/contains?${query}`,
     };
     return request<SpotifyApi.UsersFollowPlaylistResponse>(req_options);
   },

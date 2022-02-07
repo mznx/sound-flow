@@ -6,7 +6,7 @@ export default {
   getPlaybackState(
     opts: SpotifyApi.GetPlaybackStateParameterObject
   ): Promise<SpotifyApi.CurrentlyPlayingObject | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/me/player?${query}`,
@@ -20,7 +20,7 @@ export default {
     const req_options: API.Request = {
       method: "PUT",
       path: "/me/player",
-      body: JSON.stringify(opts),
+      body: JSON.stringify(opts.body),
     };
     return request(req_options);
   },
@@ -36,7 +36,7 @@ export default {
   getCurrentTrack(
     opts: SpotifyApi.GetCurrentTrackParameterObject
   ): Promise<SpotifyApi.CurrentlyPlayingObject | API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/me/player/currently-playing?${query}`,
@@ -45,12 +45,13 @@ export default {
   },
 
   startPlayback(
-    opts: SpotifyApi.PlayParameterObject
+    opts: SpotifyApi.StartPlaybackParameterObject
   ): Promise<API.NullOrError> {
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "PUT",
-      path: `/me/player/play?device_id=${opts.device_id}`,
-      body: JSON.stringify(opts),
+      path: `/me/player/play?${query}`,
+      body: JSON.stringify(opts.body),
     };
     return request(req_options);
   },
@@ -58,9 +59,10 @@ export default {
   pausePlayback(
     opts: SpotifyApi.PausePlaybackParameterObject
   ): Promise<API.NullOrError> {
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "PUT",
-      path: `/me/player/pause?device_id=${opts.device_id}`,
+      path: `/me/player/pause?${query}`,
     };
     return request(req_options);
   },
@@ -68,9 +70,10 @@ export default {
   nextTrack(
     opts: SpotifyApi.NextTrackParameterObject
   ): Promise<API.NullOrError> {
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "POST",
-      path: `/me/player/next?device_id=${opts.device_id}`,
+      path: `/me/player/next?${query}`,
     };
     return request(req_options);
   },
@@ -78,9 +81,10 @@ export default {
   prevTrack(
     opts: SpotifyApi.PrevTrackParameterObject
   ): Promise<API.NullOrError> {
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "POST",
-      path: `/me/player/previous?device_id=${opts.device_id}`,
+      path: `/me/player/previous?${query}`,
     };
     return request(req_options);
   },
@@ -88,7 +92,7 @@ export default {
   seek(
     opts: SpotifyApi.SeekToPositionParameterObject
   ): Promise<API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "POST",
       path: `/me/player/seek?${query}`,
@@ -99,7 +103,7 @@ export default {
   setRepeatMode(
     opts: SpotifyApi.SetRepeatModeParameterObject
   ): Promise<API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "PUT",
       path: `/me/player/repeat?${query}`,
@@ -110,7 +114,7 @@ export default {
   setVolume(
     opts: SpotifyApi.SetVolumeParameterObject
   ): Promise<API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "PUT",
       path: `/me/player/volume?${query}`,
@@ -121,7 +125,7 @@ export default {
   togglePlaybackShuffle(
     opts: SpotifyApi.TogglePlaybackShuffleParameterObject
   ): Promise<API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "PUT",
       path: `/me/player/shuffle?${query}`,
@@ -130,9 +134,9 @@ export default {
   },
 
   getRecentlyPlayedTracks(
-    opts: SpotifyApi.RecentlyPlayedParameterObject
+    opts: SpotifyApi.GetRecentlyPlayedTracksParameterObject
   ): Promise<API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "GET",
       path: `/me/player/recently-played?${query}`,
@@ -143,7 +147,7 @@ export default {
   addToPlaybackQueue(
     opts: SpotifyApi.AddToPlaybackQueueParameterObject
   ): Promise<API.NullOrError> {
-    const query = utils.paramObjToQueryStr(opts);
+    const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
       method: "POST",
       path: `/me/player/queue?${query}`,
