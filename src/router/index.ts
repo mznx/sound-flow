@@ -5,6 +5,8 @@ import Login from "@/views/Login.vue";
 import Callback from "@/views/Callback.vue";
 import NotFound from "@/views/NotFound.vue";
 import Album from "@/views/Album/index.vue";
+import Artist from "@/views/Artist/index.vue";
+import Playlist from "@/views/Playlist/index.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,6 +21,14 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "album/:id",
         component: Album,
+      },
+      {
+        path: "artist/:id",
+        component: Artist,
+      },
+      {
+        path: "playlist/:id",
+        component: Playlist,
       },
     ],
   },
