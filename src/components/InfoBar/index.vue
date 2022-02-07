@@ -12,9 +12,9 @@ export default class ControlBar extends Vue {}
 <style scoped lang="scss">
 .info-bar {
   width: 100%;
-  height: 50px;
+  height: 30px;
   background-color: var(--color-fg);
-  border-bottom: 1px solid #594d7e;
+  border-bottom: 1px solid var(--color-border);
   flex-shrink: 0;
 }
 </style>

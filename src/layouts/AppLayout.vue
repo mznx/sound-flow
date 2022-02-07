@@ -67,11 +67,11 @@ export default class AppLayout extends Vue {}
 .app-layout-content {
   width: 100%;
   height: 100%;
-  padding: 0 20px;
   overflow: auto;
 }
 
 .content-wrapper {
-  //
+  margin: 0 auto;
+  padding: 0 20px;
 }
 </style>

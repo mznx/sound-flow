@@ -54,7 +54,7 @@ export default class ControlBar extends Vue {}
   justify-content: space-between;
   flex-shrink: 0;
   background-color: var(--color-fg);
-  border-top: 1px solid #594d7e;
+  border-top: 1px solid var(--color-border);
   padding: 8px 10px;
 }
 
