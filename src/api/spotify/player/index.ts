@@ -44,7 +44,7 @@ export default {
     return request<SpotifyApi.CurrentlyPlayingObject>(req_options);
   },
 
-  togglePlayback(
+  startPlayback(
     opts: SpotifyApi.PlayParameterObject
   ): Promise<API.NullOrError> {
     const req_options: API.Request = {
