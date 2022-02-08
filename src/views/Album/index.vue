@@ -17,7 +17,7 @@
           </router-link>
         </span>
       </div>
-      <TrackList :tracks="tracks" />
+      <TrackList :tracks="tracks" :context_uri="context_uri" />
     </div>
   </div>
 </template>
@@ -36,6 +36,7 @@ import api from "@/api";
       album_image: "",
       album_duration: 0,
       tracks: [],
+      context_uri: "",
     };
   },
 
@@ -76,12 +77,7 @@ import api from "@/api";
       return utils.msToTime(ms, format);
     },
 
-    async setAlbumParams() {
-      this.album = await api.spotify.albums.getAlbum({
-        params: { id: this.album_id },
-      });
-      this.album_image = this.getAlbumMaxImageUrl(this.album);
-      this.album_duration = this.getAlbumDuration(this.album);
+    getTracks() {
       const tracks = this.album.tracks.items;
       tracks.forEach((track: SpotifyApi.TrackObjectFull) => {
         const t = {
@@ -91,6 +87,16 @@ import api from "@/api";
         };
         this.tracks.push(t);
       });
+    },
+
+    async setAlbumParams() {
+      this.album = await api.spotify.albums.getAlbum({
+        params: { id: this.album_id },
+      });
+      this.album_image = this.getAlbumMaxImageUrl(this.album);
+      this.album_duration = this.getAlbumDuration(this.album);
+      this.context_uri = this.album.uri;
+      this.getTracks();
       this.loaded = true;
     },
   },
