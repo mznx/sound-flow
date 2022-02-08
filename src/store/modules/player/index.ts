@@ -96,24 +96,24 @@ async function init({
 
   // errors
   player.addListener("initialization_error", ({ message }) => {
-    console.error(message);
+    console.error("[Spotify WPS] ", message);
   });
 
   player.addListener("authentication_error", ({ message }) => {
-    console.error(message);
+    console.error("[Spotify WPS] ", message);
   });
 
   player.addListener("account_error", ({ message }) => {
-    console.error(message);
+    console.error("[Spotify WPS] ", message);
   });
 
   player.addListener("playback_error", ({ message }) => {
-    console.error(message);
+    console.error("[Spotify WPS] ", message);
   });
 
   // events
   player.addListener("ready", ({ device_id }) => {
-    console.log("Ready with Device ID", device_id);
+    console.log("[Spotify WPS] Ready with Device ID", device_id);
     dispatch("setPlayer", player);
     dispatch("setDeviceId", device_id);
     api.spotify.player.transferPlayback({
@@ -122,16 +122,15 @@ async function init({
   });
 
   player.addListener("not_ready", ({ device_id }) => {
-    console.log("Device ID has gone offline", device_id);
+    console.log("[Spotify WPS] Device ID has gone offline", device_id);
   });
 
   player.addListener("player_state_changed", (playback_state) => {
-    console.log("current state: ", playback_state);
     dispatch("setPlaybackState", playback_state);
   });
 
   player.addListener("autoplay_failed", () => {
-    console.log("Autoplay is not allowed by the browser autoplay rules");
+    console.log("[Spotify WPS] Autoplay is not allowed by the browser autoplay rules");
   });
 
   await api.spotify.SDK.connect(player);
