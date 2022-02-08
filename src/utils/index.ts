@@ -11,9 +11,10 @@ export function paramObjToQueryStr<T>(opts: T): string {
 export function queryObjToStr<T>(query: T): string {
   let result = "";
 
-  JSON.parse(JSON.stringify(query), (key, val) => {
-    result += `${key}=${val}&`;
-  });
+  if (query)
+    JSON.parse(JSON.stringify(query), (key, val) => {
+      result += `${key}=${val}&`;
+    });
 
   return result;
 }
