@@ -84,6 +84,7 @@ import api from "@/api";
           name: track.name,
           duration: utils.msToTime(track.duration_ms, false),
           image: "",
+          uri: track.uri,
         };
         this.tracks.push(t);
       });

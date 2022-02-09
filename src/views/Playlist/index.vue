@@ -88,6 +88,7 @@ import api from "@/api";
           name: track.track.name,
           duration: utils.msToTime(track.track.duration_ms, false),
           image: utils.getImageUrl(track.track.album.images, false),
+          uri: track.track.uri,
         };
         this.tracks.push(t);
       });

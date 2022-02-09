@@ -1,7 +1,35 @@
 <template>
   <div class="track-list">
     <div v-for="(track, i) in tracks" :key="i" class="track-list-row">
-      <span class="track-list-num" :click="startTrack(i)">{{ i + 1 }}</span>
+      <span @click="startPauseTrack(i)">
+        <inline-svg
+          v-if="
+            track.uri === playback_state.track_window.current_track.uri &&
+            !playback_state.paused
+          "
+          class="track-list-playing"
+          :src="require('@/assets/icons/track-list-current.svg')"
+          width="20"
+          height="20"
+        />
+        <span class="track-list-num" v-else>{{ i + 1 }}</span>
+        <!-- <span class="track-list-play"> -->
+        <inline-svg
+          v-if="track.uri !== playback_state.track_window.current_track.uri"
+          class="track-list-play"
+          :src="require('@/assets/icons/track-list-play.svg')"
+          width="20"
+          height="20"
+        />
+        <inline-svg
+          v-else
+          class="track-list-play"
+          :src="require('@/assets/icons/track-list-pause.svg')"
+          width="20"
+          height="20"
+        />
+        <!-- </span> -->
+      </span>
       <span class="track-list-general">
         <img v-if="track.image" :src="track.image" class="track-list-img" />
         <span class="track-list-name">{{ track.name }}</span>
@@ -16,6 +44,7 @@ import { Vue, Options } from "vue-class-component";
 import * as utils from "@/utils";
 import api from "@/api";
 import * as API from "@/types/API";
+import { mapGetters } from "vuex";
 
 @Options({
   props: {
@@ -29,18 +58,33 @@ import * as API from "@/types/API";
     };
   },
 
+  computed: {
+    ...mapGetters({
+      playback_state: "player/getPlaybackState",
+      player: "player/getPlayer",
+    }),
+  },
+
   methods: {
     msToTime(ms: number, format: boolean) {
       return utils.msToTime(ms, format);
     },
 
-    startTrack(offset: number) {
-      api.spotify.player.startPlayback({
-        body: {
-          context_uri: this.context_uri,
-          offset: { position: offset },
-        },
-      });
+    startPauseTrack(offset: number) {
+      if (
+        this.tracks[offset].uri !==
+        this.playback_state.track_window.current_track.uri
+      ) {
+        const request_params = {
+          body: {
+            context_uri: this.context_uri,
+            offset: { position: offset },
+          },
+        };
+        api.spotify.player.startPlayback(request_params);
+      } else {
+        api.spotify.SDK.togglePlay(this.player);
+      }
     },
   },
 
@@ -78,6 +122,32 @@ export default class TrackList extends Vue {}
   justify-content: flex-end;
 }
 
+.track-list-playing {
+  fill: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  animation: playing 2s linear infinite;
+  @keyframes playing {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.6);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+.track-list-play {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  fill: var(--color-text);
+}
+
 .track-list-general {
   color: var(--color-text);
   display: flex;
@@ -99,5 +169,17 @@ export default class TrackList extends Vue {}
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.track-list-row:hover {
+  .track-list-num {
+    display: none;
+  }
+  .track-list-playing {
+    display: none;
+  }
+  .track-list-play {
+    display: flex;
+  }
 }
 </style>
