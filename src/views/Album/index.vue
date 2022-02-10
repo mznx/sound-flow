@@ -77,27 +77,31 @@ import api from "@/api";
       return utils.msToTime(ms, format);
     },
 
-    getTracks() {
+    getTracks(): any[] {
       const tracks = this.album.tracks.items;
+      let list: any[] = [];
       tracks.forEach((track: SpotifyApi.TrackObjectFull) => {
         const t = {
           name: track.name,
           duration: utils.msToTime(track.duration_ms, false),
+          artists: track.artists,
           image: "",
           uri: track.uri,
         };
-        this.tracks.push(t);
+        list.push(t);
       });
+      return list;
     },
 
     async setAlbumParams() {
+      this.loaded = false;
       this.album = await api.spotify.albums.getAlbum({
         params: { id: this.album_id },
       });
       this.album_image = this.getAlbumMaxImageUrl(this.album);
       this.album_duration = this.getAlbumDuration(this.album);
       this.context_uri = this.album.uri;
-      this.getTracks();
+      this.tracks = this.getTracks();
       this.loaded = true;
     },
   },
@@ -145,6 +149,10 @@ export default class Album extends Vue {}
   color: var(--color-text);
   font-size: 48pt;
   font-weight: bold;
+}
+
+.album-artists {
+  margin-bottom: 30px;
 }
 
 .album-artist {

@@ -1,39 +1,50 @@
 <template>
   <div class="track-list">
     <div v-for="(track, i) in tracks" :key="i" class="track-list-row">
-      <span @click="startPauseTrack(i)">
-        <inline-svg
-          v-if="
-            track.uri === playback_state.track_window.current_track.uri &&
-            !playback_state.paused
-          "
-          class="track-list-playing"
-          :src="require('@/assets/icons/track-list-current.svg')"
-          width="20"
-          height="20"
-        />
-        <span class="track-list-num" v-else>{{ i + 1 }}</span>
-        <!-- <span class="track-list-play"> -->
-        <inline-svg
-          v-if="track.uri !== playback_state.track_window.current_track.uri"
-          class="track-list-play"
-          :src="require('@/assets/icons/track-list-play.svg')"
-          width="20"
-          height="20"
-        />
-        <inline-svg
-          v-else
-          class="track-list-play"
-          :src="require('@/assets/icons/track-list-pause.svg')"
-          width="20"
-          height="20"
-        />
-        <!-- </span> -->
+      <span @click="startPauseTrack(i)" class="track-list-index">
+        <span v-if="isCurrentTrack(i) && !playback_state.paused">
+          <inline-svg
+            class="track-list-current"
+            :src="require('@/assets/icons/track-list-current.svg')"
+          />
+          <inline-svg
+            class="track-list-control"
+            :src="require('@/assets/icons/track-list-pause.svg')"
+          />
+        </span>
+        <span v-else>
+          <span class="track-list-num">{{ i + 1 }}</span>
+          <inline-svg
+            class="track-list-control"
+            :src="require('@/assets/icons/track-list-play.svg')"
+          />
+        </span>
       </span>
+
       <span class="track-list-general">
         <img v-if="track.image" :src="track.image" class="track-list-img" />
-        <span class="track-list-name">{{ track.name }}</span>
+        <span class="track-list-info">
+          <span
+            class="track-list-name"
+            :class="{ 'track-list-active': isCurrentTrack(i) }"
+          >
+            {{ track.name }}
+          </span>
+          <span class="track-list-artists">
+            <span
+              v-for="(artist, i) in track.artists"
+              :key="i"
+              class="track-list-artist"
+            >
+              <span v-if="i > 0">, </span>
+              <router-link :to="'/artist/' + spotifyUriParse(artist.uri).val">
+                {{ artist.name }}
+              </router-link>
+            </span>
+          </span>
+        </span>
       </span>
+
       <span class="track-list-duration">{{ track.duration }}</span>
     </div>
   </div>
@@ -41,21 +52,18 @@
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
-import * as utils from "@/utils";
-import api from "@/api";
-import * as API from "@/types/API";
+import { PropType } from "vue";
 import { mapGetters } from "vuex";
+import { TracksInterface } from "./types";
+import api from "@/api";
 
 @Options({
   props: {
-    tracks: Object,
+    tracks: {
+      type: Array as PropType<TracksInterface[]>,
+      required: true,
+    },
     context_uri: String,
-  },
-
-  data() {
-    return {
-      images: [],
-    };
   },
 
   computed: {
@@ -66,8 +74,21 @@ import { mapGetters } from "vuex";
   },
 
   methods: {
-    msToTime(ms: number, format: boolean) {
-      return utils.msToTime(ms, format);
+    spotifyUriParse(uri: string) {
+      const uri_arr = uri.split(":");
+      return {
+        type: uri_arr[1],
+        val: uri_arr[2],
+      };
+    },
+
+    isCurrentTrack(offset: number): boolean {
+      if (
+        this.tracks[offset].uri ===
+        this.playback_state.track_window.current_track.uri
+      )
+        return true;
+      else return false;
     },
 
     startPauseTrack(offset: number) {
@@ -89,7 +110,7 @@ import { mapGetters } from "vuex";
   },
 
   created() {
-    console.log("[debug] TrackList (created) tracks:", this.tracks);
+    /* --- */ console.log("[debug] TrackList (created) tracks:", this.tracks);
   },
 })
 export default class TrackList extends Vue {}
@@ -103,7 +124,7 @@ export default class TrackList extends Vue {}
 .track-list-row {
   height: 50px;
   display: grid;
-  grid-template-columns: 16px 1fr 1fr;
+  grid-template-columns: 16px 4fr minmax(120px, 1fr);
   grid-gap: 16px;
   align-items: center;
   border-radius: 4px;
@@ -115,6 +136,10 @@ export default class TrackList extends Vue {}
   }
 }
 
+.track-list-index {
+  //
+}
+
 .track-list-num {
   color: #999;
   display: flex;
@@ -122,26 +147,27 @@ export default class TrackList extends Vue {}
   justify-content: flex-end;
 }
 
-.track-list-playing {
-  fill: var(--color-accent);
+.track-list-current {
+  stroke: var(--color-accent-light);
+  fill: var(--color-accent-light);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  animation: playing 2s linear infinite;
+  animation: playing 1s cubic-bezier(0, 1.3, 0.55, 0) infinite;
   @keyframes playing {
     0% {
-      transform: scale(1);
+      transform: scale(1.2);
     }
     50% {
-      transform: scale(0.6);
+      transform: scale(0.8);
     }
     100% {
-      transform: scale(1);
+      transform: scale(1.2);
     }
   }
 }
 
-.track-list-play {
+.track-list-control {
   display: none;
   align-items: center;
   justify-content: center;
@@ -160,8 +186,35 @@ export default class TrackList extends Vue {}
   margin-right: 16px;
 }
 
+.track-list-info {
+  display: flex;
+  flex-direction: column;
+}
+
 .track-list-name {
-  //
+  font-size: 11pt;
+}
+
+.track-list-active {
+  color: var(--color-accent-light);
+}
+
+.track-list-artists {
+  font-size: 10pt;
+}
+
+.track-list-artist {
+  color: #999;
+
+  a {
+    color: #999;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-text);
+      text-decoration: underline;
+    }
+  }
 }
 
 .track-list-duration {
@@ -175,10 +228,10 @@ export default class TrackList extends Vue {}
   .track-list-num {
     display: none;
   }
-  .track-list-playing {
+  .track-list-current {
     display: none;
   }
-  .track-list-play {
+  .track-list-control {
     display: flex;
   }
 }
