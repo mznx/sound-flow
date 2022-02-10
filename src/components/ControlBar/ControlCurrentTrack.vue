@@ -1,6 +1,8 @@
 <template>
   <div class="cb-track">
-    <img :src="track_image" />
+    <router-link :to="context_link">
+      <img :src="track_image" />
+    </router-link>
     <div class="cb-track-info">
       <router-link :to="album_link" class="cb-track-name">
         {{ track_name }}
@@ -28,6 +30,7 @@ import * as utils from "@/utils";
       track_name: "",
       track_artists: [],
       track_image: "",
+      context_link: "",
     };
   },
 
@@ -42,17 +45,9 @@ import * as utils from "@/utils";
   },
 
   methods: {
-    spotifyUriParse(uri: string) {
-      const uri_arr = uri.split(":");
-      return {
-        type: uri_arr[1],
-        val: uri_arr[2],
-      };
-    },
-
     getTrackAlbumId(track: Spotify.Track): string {
       const uri = track.album.uri;
-      const spotify_uri_obj = this.spotifyUriParse(uri);
+      const spotify_uri_obj = utils.spotifyUriParse(uri);
       return spotify_uri_obj.val;
     },
 
@@ -63,6 +58,8 @@ import * as utils from "@/utils";
 
     updateContext(): void {
       const track = this.playback_state.track_window.current_track;
+      const parsed_uri = utils.spotifyUriParse(this.playback_state.context.uri);
+      this.context_link = `/${parsed_uri.type}/${parsed_uri.val}`;
       this.album_id = this.getTrackAlbumId(track);
       this.album_link = "/album/" + this.album_id;
       this.track_name = track.name;
