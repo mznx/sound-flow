@@ -9,14 +9,7 @@
     </div>
     <div class="album-playlist">
       <h2 class="album-title">{{ album.name }}</h2>
-      <div class="album-artists">
-        <span v-for="(art, i) in album.artists" :key="art" class="album-artist">
-          <span v-if="i > 0">, </span>
-          <router-link :to="'/artist/' + spotifyUriParse(art.uri).val">
-            {{ art.name }}
-          </router-link>
-        </span>
-      </div>
+      <ArtistsList class="album-artists" :artists="album.artists" />
       <TrackList :tracks="tracks" :context_uri="context_uri" />
     </div>
   </div>
@@ -25,7 +18,9 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import TrackList from "@/components/TrackList/index.vue";
+import ArtistsList from "@/components/ArtistsList/index.vue";
 import * as utils from "@/utils";
+import TracksInterface from "@/components/TrackList/types";
 import api from "@/api";
 
 @Options({
@@ -42,6 +37,7 @@ import api from "@/api";
 
   components: {
     TrackList,
+    ArtistsList,
   },
 
   computed: {
@@ -77,11 +73,11 @@ import api from "@/api";
       return utils.msToTime(ms, format);
     },
 
-    getTracks(): any[] {
+    getTracks(): TracksInterface[] {
       const tracks = this.album.tracks.items;
-      let list: any[] = [];
+      let list: TracksInterface[] = [];
       tracks.forEach((track: SpotifyApi.TrackObjectFull) => {
-        const t = {
+        const t: TracksInterface = {
           name: track.name,
           duration: utils.msToTime(track.duration_ms, false),
           artists: track.artists,
@@ -153,22 +149,6 @@ export default class Album extends Vue {}
 
 .album-artists {
   margin-bottom: 30px;
-}
-
-.album-artist {
-  color: #999;
-  display: inline-block;
-  font-size: 15pt;
-
-  a {
-    color: #999;
-    text-decoration: none;
-
-    &:hover {
-      cursor: pointer;
-      color: var(--color-text);
-      text-decoration: underline;
-    }
-  }
+  font-size: 12pt;
 }
 </style>

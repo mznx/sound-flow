@@ -30,18 +30,7 @@
           >
             {{ track.name }}
           </span>
-          <span class="track-list-artists">
-            <span
-              v-for="(artist, i) in track.artists"
-              :key="i"
-              class="track-list-artist"
-            >
-              <span v-if="i > 0">, </span>
-              <router-link :to="'/artist/' + spotifyUriParse(artist.uri).val">
-                {{ artist.name }}
-              </router-link>
-            </span>
-          </span>
+          <ArtistsList :artists="track.artists" class="track-list-artists" />
         </span>
       </span>
 
@@ -55,6 +44,7 @@ import { Vue, Options } from "vue-class-component";
 import { PropType } from "vue";
 import { mapGetters } from "vuex";
 import { TracksInterface } from "./types";
+import ArtistsList from "@/components/ArtistsList/index.vue";
 import api from "@/api";
 
 @Options({
@@ -64,6 +54,10 @@ import api from "@/api";
       required: true,
     },
     context_uri: String,
+  },
+
+  components: {
+    ArtistsList,
   },
 
   computed: {
@@ -132,7 +126,7 @@ export default class TrackList extends Vue {}
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.05);
-    cursor: pointer;
+    // cursor: pointer;
   }
 }
 
@@ -172,6 +166,7 @@ export default class TrackList extends Vue {}
   align-items: center;
   justify-content: center;
   fill: var(--color-text);
+  cursor: pointer;
 }
 
 .track-list-general {

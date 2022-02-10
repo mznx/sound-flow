@@ -70,3 +70,11 @@ export function getImageUrl(
   }
   return url;
 }
+
+export function spotifyUriParse(uri: string): { type: string; val: string } {
+  const uri_arr = uri.split(":");
+  return {
+    type: uri_arr[1],
+    val: uri_arr[2],
+  };
+}

@@ -5,24 +5,14 @@
       <router-link :to="album_link" class="cb-track-name">
         {{ track_name }}
       </router-link>
-      <div class="cb-track-artists">
-        <span
-          v-for="(art, i) in track_artists"
-          :key="art"
-          class="cb-track-artist"
-        >
-          <span v-if="i > 0">, </span>
-          <router-link :to="'/artist/' + spotifyUriParse(art.uri).val">
-            {{ art.name }}
-          </router-link>
-        </span>
-      </div>
+      <ArtistsList class="cb-track-artists" :artists="track_artists" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import ArtistsList from "@/components/ArtistsList/index.vue";
 import * as utils from "@/utils";
 
 @Options({
@@ -39,6 +29,10 @@ import * as utils from "@/utils";
       track_artists: [],
       track_image: "",
     };
+  },
+
+  components: {
+    ArtistsList,
   },
 
   computed: {
@@ -121,21 +115,6 @@ export default class ControlCurrentTrack extends Vue {}
 }
 
 .cb-track-artists {
-  .cb-track-artist {
-    color: #999;
-    display: inline-block;
-    font-size: 8pt;
-
-    a {
-      color: #999;
-      text-decoration: none;
-
-      &:hover {
-        cursor: pointer;
-        color: var(--color-text);
-        text-decoration: underline;
-      }
-    }
-  }
+  font-size: 8pt;
 }
 </style>
