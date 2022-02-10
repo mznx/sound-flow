@@ -5,42 +5,30 @@
       :class="{ active: this.playback_state.shuffle }"
       @click="toggleShuffle"
     >
-      <inline-svg
-        :src="require('@/assets/icons/control-shuffle.svg')"
-        width="30"
-        height="30"
-      />
+      <inline-svg :src="require('@/assets/icons/control-shuffle.svg')" />
     </button>
 
     <button class="cb-back" @click="previousTrack">
-      <inline-svg
-        :src="require('@/assets/icons/control-back.svg')"
-        width="20"
-        height="20"
-      />
+      <inline-svg :src="require('@/assets/icons/control-back.svg')" />
     </button>
 
     <button class="cb-playpause" @click="playPause">
       <inline-svg
         v-if="this.playback_state.paused"
         :src="require('@/assets/icons/control-play.svg')"
-        width="35"
-        height="35"
+        width="30px"
+        height="30px"
       />
       <inline-svg
         v-else
         :src="require('@/assets/icons/control-pause.svg')"
-        width="35"
-        height="35"
+        width="30px"
+        height="30px"
       />
     </button>
 
     <button class="cb-forward" @click="nextTrack">
-      <inline-svg
-        :src="require('@/assets/icons/control-forward.svg')"
-        width="20"
-        height="20"
-      />
+      <inline-svg :src="require('@/assets/icons/control-forward.svg')" />
     </button>
 
     <button
@@ -51,11 +39,7 @@
       ]"
       @click="toggleRepeatMode"
     >
-      <inline-svg
-        :src="require('@/assets/icons/control-repeat.svg')"
-        width="20"
-        height="20"
-      />
+      <inline-svg :src="require('@/assets/icons/control-repeat.svg')" />
     </button>
   </div>
 </template>

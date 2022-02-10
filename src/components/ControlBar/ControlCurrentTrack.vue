@@ -66,16 +66,24 @@ import * as utils from "@/utils";
       const track_images: Spotify.Image[] = track.album.images;
       return utils.getImageUrl(track_images, false);
     },
-  },
 
-  watch: {
-    context() {
+    updateContext(): void {
       const track = this.playback_state.track_window.current_track;
       this.album_id = this.getTrackAlbumId(track);
       this.album_link = "/album/" + this.album_id;
       this.track_name = track.name;
       this.track_artists = track.artists;
       this.track_image = this.getTrackMinImageUrl(track);
+    },
+  },
+
+  created() {
+    this.updateContext();
+  },
+
+  watch: {
+    context() {
+      this.updateContext();
     },
   },
 })
