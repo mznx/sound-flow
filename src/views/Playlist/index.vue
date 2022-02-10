@@ -9,18 +9,7 @@
     </div>
     <div class="playlist-playlist">
       <h2 class="playlist-title">{{ playlist.name }}</h2>
-      <div class="playlist-artists">
-        <span
-          v-for="(art, i) in playlist.artists"
-          :key="art"
-          class="playlist-artist"
-        >
-          <span v-if="i > 0">, </span>
-          <router-link :to="'/artist/' + spotifyUriParse(art.uri).val">
-            {{ art.name }}
-          </router-link>
-        </span>
-      </div>
+      <div class="playlist-description">{{ playlist.description }}</div>
       <TrackList :tracks="tracks" :context_uri="context_uri" />
     </div>
   </div>
@@ -83,18 +72,22 @@ import api from "@/api";
 
     getTracks() {
       const tracks = this.playlist.tracks.items;
+      let list = [];
       tracks.forEach((track: SpotifyApi.PlaylistTrackObject) => {
         const t = {
           name: track.track.name,
           duration: utils.msToTime(track.track.duration_ms, false),
+          artists: track.track.artists,
           image: utils.getImageUrl(track.track.album.images, false),
           uri: track.track.uri,
         };
-        this.tracks.push(t);
+        list.push(t);
       });
+      return list;
     },
 
     async setPlaylistParams() {
+      this.loaded = false;
       this.playlist = await api.spotify.playlists.getPlaylist({
         params: {
           playlist_id: this.playlist_id,
@@ -103,7 +96,7 @@ import api from "@/api";
       this.playlist_image = this.getPlaylistMaxImageUrl(this.playlist);
       this.playlist_duration = this.getPlaylistDuration(this.playlist);
       this.context_uri = this.playlist.uri;
-      this.getTracks();
+      this.tracks = this.getTracks();
       this.loaded = true;
     },
   },
@@ -153,20 +146,9 @@ export default class Playlist extends Vue {}
   font-weight: bold;
 }
 
-.playlist-artist {
-  color: #999;
-  display: inline-block;
-  font-size: 15pt;
-
-  a {
-    color: #999;
-    text-decoration: none;
-
-    &:hover {
-      cursor: pointer;
-      color: var(--color-text);
-      text-decoration: underline;
-    }
-  }
+.playlist-description {
+  margin-bottom: 30px;
+  color: var(--color-text-dark);
+  font-size: 12pt;
 }
 </style>
