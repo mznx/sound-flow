@@ -20,7 +20,7 @@ import { Options, Vue } from "vue-class-component";
 import TrackList from "@/components/TrackList/index.vue";
 import ArtistsList from "@/components/ArtistsList/index.vue";
 import * as utils from "@/utils";
-import TracksInterface from "@/components/TrackList/types";
+import { TracksInterface } from "@/components/TrackList/types";
 import api from "@/api";
 
 @Options({
@@ -47,14 +47,6 @@ import api from "@/api";
   },
 
   methods: {
-    spotifyUriParse(uri: string) {
-      const uri_arr = uri.split(":");
-      return {
-        type: uri_arr[1],
-        val: uri_arr[2],
-      };
-    },
-
     getAlbumMaxImageUrl(album: SpotifyApi.AlbumObjectFull) {
       const album_images: Spotify.Image[] = album.images;
       return utils.getImageUrl(album_images, true);

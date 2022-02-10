@@ -19,6 +19,7 @@
 import { Options, Vue } from "vue-class-component";
 import TrackList from "@/components/TrackList/index.vue";
 import * as utils from "@/utils";
+import { TracksInterface } from "@/components/TrackList/types";
 import api from "@/api";
 
 @Options({
@@ -44,14 +45,6 @@ import api from "@/api";
   },
 
   methods: {
-    spotifyUriParse(uri: string) {
-      const uri_arr = uri.split(":");
-      return {
-        type: uri_arr[1],
-        val: uri_arr[2],
-      };
-    },
-
     getPlaylistMaxImageUrl(playlist: SpotifyApi.PlaylistObjectFull) {
       const playlist_images: Spotify.Image[] = playlist.images;
       return utils.getImageUrl(playlist_images, true);
@@ -70,9 +63,9 @@ import api from "@/api";
       return utils.msToTime(ms, format);
     },
 
-    getTracks() {
+    getTracks(): TracksInterface[] {
       const tracks = this.playlist.tracks.items;
-      let list = [];
+      let list: TracksInterface[] = [];
       tracks.forEach((track: SpotifyApi.PlaylistTrackObject) => {
         const t = {
           name: track.track.name,
