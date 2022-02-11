@@ -24,7 +24,7 @@ export default {
     return request<SpotifyApi.MultipleArtistsResponse>(req_options);
   },
 
-  getArtisAlbums(
+  getArtistAlbums(
     opts: SpotifyApi.GetArtistAlbumsParameterObject
   ): Promise<SpotifyApi.ArtistsAlbumsResponse | API.NullOrError> {
     const query = utils.queryObjToStr(opts.query);
@@ -35,7 +35,7 @@ export default {
     return request<SpotifyApi.ArtistsAlbumsResponse>(req_options);
   },
 
-  getArtisTopTracks(
+  getArtistTopTracks(
     opts: SpotifyApi.GetArtistTopTracksParameterObject
   ): Promise<SpotifyApi.ArtistsTopTracksResponse | API.NullOrError> {
     const query = utils.queryObjToStr(opts.query);
