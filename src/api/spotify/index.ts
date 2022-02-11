@@ -5,6 +5,7 @@ import tracks from "./tracks";
 import search from "./search";
 import users from "./users";
 import playlists from "./playlists";
+import genres from "./genres";
 import player from "./player";
 
 export default {
@@ -15,5 +16,6 @@ export default {
   search,
   users,
   playlists,
+  genres,
   player,
 };
