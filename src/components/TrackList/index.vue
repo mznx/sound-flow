@@ -43,14 +43,14 @@
 import { Vue, Options } from "vue-class-component";
 import { PropType } from "vue";
 import { mapGetters } from "vuex";
-import { TracksInterface } from "./types";
+import { TrackListInterface } from "./types";
 import ArtistsList from "@/components/ArtistsList/index.vue";
 import api from "@/api";
 
 @Options({
   props: {
     tracks: {
-      type: Array as PropType<TracksInterface[]>,
+      type: Array as PropType<TrackListInterface[]>,
       required: true,
     },
     context_uri: String,

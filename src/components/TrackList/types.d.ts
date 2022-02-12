@@ -1,4 +1,4 @@
-export interface TracksInterface {
+export interface TrackListInterface {
   name: string;
   duration: string;
   artists: SpotifyApi.ArtistObjectSimplified[];
