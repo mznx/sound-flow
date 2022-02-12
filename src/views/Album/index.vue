@@ -98,7 +98,6 @@ export default class Album extends Vue {}
 .album {
   width: 100%;
   // height: 100%;
-  margin: 20px 0;
   display: flex;
   flex-direction: row;
 }
@@ -111,7 +110,6 @@ export default class Album extends Vue {}
   flex-direction: column;
 
   img {
-    border-radius: 15px;
     box-shadow: 0 0 8px -4px;
   }
 }

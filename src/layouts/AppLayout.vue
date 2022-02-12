@@ -71,7 +71,8 @@ export default class AppLayout extends Vue {}
 }
 
 .content-wrapper {
-  margin: 0 auto;
+  max-width: 1400px;
+  margin: 20px auto;
   padding: 0 20px;
 }
 </style>

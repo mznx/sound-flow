@@ -107,7 +107,6 @@ export default class Playlist extends Vue {}
 .playlist {
   width: 100%;
   // height: 100%;
-  margin: 20px 0;
   display: flex;
   flex-direction: row;
 }
@@ -120,7 +119,6 @@ export default class Playlist extends Vue {}
   flex-direction: column;
 
   img {
-    border-radius: 15px;
     box-shadow: 0 0 8px -4px;
   }
 }

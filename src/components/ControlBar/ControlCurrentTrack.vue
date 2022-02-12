@@ -89,7 +89,6 @@ export default class ControlCurrentTrack extends Vue {}
 
   img {
     height: 100%;
-    border-radius: 4px;
   }
 }
 
