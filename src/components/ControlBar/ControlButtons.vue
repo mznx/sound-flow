@@ -135,7 +135,7 @@ export default class ControlButtons extends Vue {}
     &.track:after {
       content: "1";
       position: absolute;
-      top: 4px;
+      top: 0px;
       right: 4px;
       color: var(--color-fg);
       font-size: 10pt;

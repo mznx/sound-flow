@@ -52,8 +52,8 @@ import * as utils from "@/utils";
     },
 
     getTrackMinImageUrl(track: Spotify.Track) {
-      const track_images: Spotify.Image[] = track.album.images;
-      return utils.getImageUrl(track_images, false);
+      const track_album = track.album;
+      return utils.getImageUrl(track_album, false);
     },
 
     updateContext(): void {
