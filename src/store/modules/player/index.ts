@@ -127,10 +127,13 @@ async function init({
 
   player.addListener("player_state_changed", (playback_state) => {
     dispatch("setPlaybackState", playback_state);
+    dispatch("setPlayback");
   });
 
   player.addListener("autoplay_failed", () => {
-    console.log("[Spotify WPS] Autoplay is not allowed by the browser autoplay rules");
+    console.log(
+      "[Spotify WPS] Autoplay is not allowed by the browser autoplay rules"
+    );
   });
 
   await api.spotify.SDK.connect(player);
@@ -156,10 +159,8 @@ function setDeviceId(
   commit("SET_DEVICE_ID", device_id);
 }
 
-function setPlayback(
-  { commit }: ActionContext<PlayerState, RootState>,
-  playback: SpotifyApi.CurrentlyPlayingObject
-): void {
+async function setPlayback({ commit }: ActionContext<PlayerState, RootState>) {
+  const playback = await api.spotify.player.getPlaybackState({});
   /* --- */ console.log("[debug] player/setPlayback: ", playback);
   commit("SET_PLAYBACK", playback);
 }
