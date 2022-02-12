@@ -1,3 +1,5 @@
+import { TrackListInterface } from "@/components/TrackList/types";
+
 export function paramObjToQueryStr<T>(opts: T): string {
   let result = "";
 
@@ -45,28 +47,30 @@ export function msToTime(ms: number, format: boolean): string {
   return time;
 }
 
-export function getImageUrl(
-  images: Spotify.Image[],
-  find_max: boolean
-): string {
-  let url = images[0].url;
-  if (images[0].height) {
-    let curr_size: number = images[0].height;
-    images.forEach((img: Spotify.Image) => {
-      if (img.height) {
-        if (find_max) {
-          if (img.height >= curr_size) {
-            url = img.url;
-            curr_size = img.height;
-          }
-        } else {
-          if (img.height <= curr_size) {
-            url = img.url;
-            curr_size = img.height;
+export function getImageUrl(album: Spotify.Album, find_max: boolean): string {
+  let url = "";
+  if (album && "images" in album) {
+    const images = album.images;
+    url = images[0].url;
+
+    if (images[0].height) {
+      let curr_size: number = images[0].height;
+      images.forEach((img: Spotify.Image) => {
+        if (img.height) {
+          if (find_max) {
+            if (img.height >= curr_size) {
+              url = img.url;
+              curr_size = img.height;
+            }
+          } else {
+            if (img.height <= curr_size) {
+              url = img.url;
+              curr_size = img.height;
+            }
           }
         }
-      }
-    });
+      });
+    }
   }
   return url;
 }
@@ -77,4 +81,21 @@ export function spotifyUriParse(uri: string): { type: string; val: string } {
     type: uri_arr[1],
     val: uri_arr[2],
   };
+}
+
+export function getTracksArray(
+  tracks: SpotifyApi.TrackObjectFull[]
+): TrackListInterface[] {
+  const list: TrackListInterface[] = [];
+  tracks.forEach((track: SpotifyApi.TrackObjectFull) => {
+    const t: TrackListInterface = {
+      name: track.name,
+      duration: msToTime(track.duration_ms, false),
+      artists: track.artists,
+      image: getImageUrl(track.album, false),
+      uri: track.uri,
+    };
+    list.push(t);
+  });
+  return list;
 }
