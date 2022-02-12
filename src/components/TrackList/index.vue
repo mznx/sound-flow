@@ -88,10 +88,7 @@ import api from "@/api";
     },
 
     async startPauseTrack(offset: number) {
-      if (
-        this.tracks[offset].uri !==
-        this.playback_state.track_window.current_track.uri
-      ) {
+      if (this.isCurrentTrack(offset)) {
         let request_params = {};
         if (this.uris)
           request_params = {
@@ -111,14 +108,6 @@ import api from "@/api";
       } else {
         await api.spotify.SDK.togglePlay(this.player);
       }
-      console.log(
-        "LALALALALALALALALALALALA\np_state: ",
-        this.playback_state,
-        "\npl: ",
-        this.player,
-        "\np: ",
-        this.playback
-      );
     },
   },
 
