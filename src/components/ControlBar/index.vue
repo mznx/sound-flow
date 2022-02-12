@@ -1,9 +1,9 @@
 <template>
   <div class="control-bar">
-    <div class="cb-left">
+    <div class="control-bar-left">
       <ControlCurrentTrack :player="player" :playback_state="playback_state" />
     </div>
-    <div class="cb-center">
+    <div class="control-bar-center">
       <ControlButtons
         :player="player"
         :device_id="device_id"
@@ -11,7 +11,8 @@
       />
       <ControlPlayback :player="player" :playback_state="playback_state" />
     </div>
-    <div class="cb-right">
+    <div class="control-bar-right">
+      <ControlDevice />
       <ControlVolume :player="player" :playback_state="playback_state" />
     </div>
   </div>
@@ -24,6 +25,7 @@ import ControlButtons from "./ControlButtons.vue";
 import ControlPlayback from "./ControlPlayback.vue";
 import ControlVolume from "./ControlVolume.vue";
 import ControlCurrentTrack from "./ControlCurrentTrack.vue";
+import ControlDevice from "./ControlDevice.vue";
 
 @Options({
   components: {
@@ -31,6 +33,7 @@ import ControlCurrentTrack from "./ControlCurrentTrack.vue";
     ControlPlayback,
     ControlVolume,
     ControlCurrentTrack,
+    ControlDevice,
   },
 
   computed: {
@@ -58,7 +61,7 @@ export default class ControlBar extends Vue {}
   padding: 8px 10px;
 }
 
-.cb-left {
+.control-bar-left {
   width: 100%;
   height: 100%;
   display: flex;
@@ -66,7 +69,7 @@ export default class ControlBar extends Vue {}
   align-items: center;
 }
 
-.cb-center {
+.control-bar-center {
   width: 100%;
   height: 100%;
   display: flex;
@@ -74,7 +77,7 @@ export default class ControlBar extends Vue {}
   justify-content: space-between;
 }
 
-.cb-right {
+.control-bar-right {
   width: 100%;
   height: 100%;
   display: flex;
