@@ -19,7 +19,7 @@
 import { Options, Vue } from "vue-class-component";
 import TrackList from "@/components/TrackList/index.vue";
 import * as utils from "@/utils";
-import { TracksInterface } from "@/components/TrackList/types";
+import { TrackListInterface } from "@/components/TrackList/types";
 import api from "@/api";
 
 @Options({
@@ -46,8 +46,7 @@ import api from "@/api";
 
   methods: {
     getPlaylistMaxImageUrl(playlist: SpotifyApi.PlaylistObjectFull) {
-      const playlist_images: Spotify.Image[] = playlist.images;
-      return utils.getImageUrl(playlist_images, true);
+      return utils.getImageUrl(playlist, true);
     },
 
     getPlaylistDuration(playlist: SpotifyApi.PlaylistObjectFull) {
@@ -63,20 +62,13 @@ import api from "@/api";
       return utils.msToTime(ms, format);
     },
 
-    getTracks(): TracksInterface[] {
+    prepareTracks() {
+      let prepared_tracks: SpotifyApi.TrackObjectFull[] = [];
       const tracks = this.playlist.tracks.items;
-      let list: TracksInterface[] = [];
       tracks.forEach((track: SpotifyApi.PlaylistTrackObject) => {
-        const t = {
-          name: track.track.name,
-          duration: utils.msToTime(track.track.duration_ms, false),
-          artists: track.track.artists,
-          image: utils.getImageUrl(track.track.album.images, false),
-          uri: track.track.uri,
-        };
-        list.push(t);
+        prepared_tracks.push(track.track);
       });
-      return list;
+      return prepared_tracks;
     },
 
     async setPlaylistParams() {
@@ -89,7 +81,11 @@ import api from "@/api";
       this.playlist_image = this.getPlaylistMaxImageUrl(this.playlist);
       this.playlist_duration = this.getPlaylistDuration(this.playlist);
       this.context_uri = this.playlist.uri;
-      this.tracks = this.getTracks();
+      // this.tracks = this.getTracks();
+      const prepared_tracks = this.prepareTracks();
+      const tracks: TrackListInterface[] =
+        utils.getTracksArray(prepared_tracks);
+      this.tracks = tracks;
       this.loaded = true;
     },
   },

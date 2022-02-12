@@ -20,7 +20,7 @@ import { Options, Vue } from "vue-class-component";
 import TrackList from "@/components/TrackList/index.vue";
 import ArtistsList from "@/components/ArtistsList/index.vue";
 import * as utils from "@/utils";
-import { TracksInterface } from "@/components/TrackList/types";
+import { TrackListInterface } from "@/components/TrackList/types";
 import api from "@/api";
 
 @Options({
@@ -48,8 +48,7 @@ import api from "@/api";
 
   methods: {
     getAlbumMaxImageUrl(album: SpotifyApi.AlbumObjectFull) {
-      const album_images: Spotify.Image[] = album.images;
-      return utils.getImageUrl(album_images, true);
+      return utils.getImageUrl(album, true);
     },
 
     getAlbumDuration(album: SpotifyApi.AlbumObjectFull) {
@@ -65,22 +64,6 @@ import api from "@/api";
       return utils.msToTime(ms, format);
     },
 
-    getTracks(): TracksInterface[] {
-      const tracks = this.album.tracks.items;
-      let list: TracksInterface[] = [];
-      tracks.forEach((track: SpotifyApi.TrackObjectFull) => {
-        const t: TracksInterface = {
-          name: track.name,
-          duration: utils.msToTime(track.duration_ms, false),
-          artists: track.artists,
-          image: "",
-          uri: track.uri,
-        };
-        list.push(t);
-      });
-      return list;
-    },
-
     async setAlbumParams() {
       this.loaded = false;
       this.album = await api.spotify.albums.getAlbum({
@@ -89,7 +72,11 @@ import api from "@/api";
       this.album_image = this.getAlbumMaxImageUrl(this.album);
       this.album_duration = this.getAlbumDuration(this.album);
       this.context_uri = this.album.uri;
-      this.tracks = this.getTracks();
+      // this.tracks = this.getTracks();
+      const tracks: TrackListInterface[] = utils.getTracksArray(
+        this.album.tracks.items
+      );
+      this.tracks = tracks;
       this.loaded = true;
     },
   },
