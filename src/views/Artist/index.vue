@@ -6,7 +6,7 @@
     </div>
 
     <div class="artist-top-tracks">
-      <TrackList :tracks="tracks" />
+      <TrackList :tracks="tracks" :uris="tracks_uris" />
     </div>
   </div>
 </template>
@@ -25,6 +25,7 @@ import api from "@/api";
       artist: null,
       artist_image: "",
       tracks: [],
+      tracks_uris: [],
     };
   },
 
@@ -39,6 +40,14 @@ import api from "@/api";
   },
 
   methods: {
+    getTracksUris() {
+      let uris: string[] = [];
+      this.tracks.forEach((track: TrackListInterface) => {
+        uris.push(track.uri);
+      });
+      return uris;
+    },
+
     getArtistMaxImageUrl(): string {
       return utils.getImageUrl(this.artist, true);
     },
@@ -61,6 +70,7 @@ import api from "@/api";
         const tracks: TrackListInterface[] = utils.getTracksArray(top_tracks);
         this.tracks = tracks;
       }
+      this.tracks_uris = this.getTracksUris();
       this.loaded = true;
 
       /* --- */ console.log(
@@ -98,16 +108,15 @@ export default class Arist extends Vue {}
 .artist-header {
   width: 100%;
   height: 300px;
+  margin-bottom: 60px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  margin-top: 20px;
 
   img {
     width: 300px;
     height: 300px;
     object-fit: cover;
-    border-radius: 50%;
     box-shadow: 0 0 20px -10px;
   }
 
@@ -120,7 +129,6 @@ export default class Arist extends Vue {}
 }
 
 .artist-top-tracks {
-  width: 60%;
-  margin: 0 auto;
+  width: 100%;
 }
 </style>

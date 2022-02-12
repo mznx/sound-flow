@@ -54,6 +54,7 @@ import api from "@/api";
       required: true,
     },
     context_uri: String,
+    uris: Array,
   },
 
   components: {
@@ -64,6 +65,7 @@ import api from "@/api";
     ...mapGetters({
       playback_state: "player/getPlaybackState",
       player: "player/getPlayer",
+      playback: "player/getPlayback",
     }),
   },
 
@@ -85,21 +87,38 @@ import api from "@/api";
       else return false;
     },
 
-    startPauseTrack(offset: number) {
+    async startPauseTrack(offset: number) {
       if (
         this.tracks[offset].uri !==
         this.playback_state.track_window.current_track.uri
       ) {
-        const request_params = {
-          body: {
-            context_uri: this.context_uri,
-            offset: { position: offset },
-          },
-        };
-        api.spotify.player.startPlayback(request_params);
+        let request_params = {};
+        if (this.uris)
+          request_params = {
+            body: {
+              uris: this.uris,
+              offset: { position: offset },
+            },
+          };
+        else
+          request_params = {
+            body: {
+              context_uri: this.context_uri,
+              offset: { position: offset },
+            },
+          };
+        await api.spotify.player.startPlayback(request_params);
       } else {
-        api.spotify.SDK.togglePlay(this.player);
+        await api.spotify.SDK.togglePlay(this.player);
       }
+      console.log(
+        "LALALALALALALALALALALALA\np_state: ",
+        this.playback_state,
+        "\npl: ",
+        this.player,
+        "\np: ",
+        this.playback
+      );
     },
   },
 
@@ -179,6 +198,7 @@ export default class TrackList extends Vue {}
 .track-list-img {
   height: 40px;
   margin-right: 16px;
+  border-radius: 4px;
 }
 
 .track-list-info {
