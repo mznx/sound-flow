@@ -1,25 +1,12 @@
 <template>
   <div class="track-list">
     <div v-for="(track, i) in tracks" :key="i" class="track-list-row">
-      <span @click="startPauseTrack(i)" class="track-list-index">
-        <span v-if="isCurrentTrack(i) && !playback_state.paused">
-          <inline-svg
-            class="track-list-current"
-            :src="require('@/assets/icons/track-list-current.svg')"
-          />
-          <inline-svg
-            class="track-list-control"
-            :src="require('@/assets/icons/track-list-pause.svg')"
-          />
-        </span>
-        <span v-else>
-          <span class="track-list-num">{{ i + 1 }}</span>
-          <inline-svg
-            class="track-list-control"
-            :src="require('@/assets/icons/track-list-play.svg')"
-          />
-        </span>
-      </span>
+      <TrackListPlayback
+        :track="track"
+        :num="i"
+        :uris="uris"
+        :context_uri="context_uri"
+      />
 
       <span class="track-list-general">
         <img v-if="track.image" :src="track.image" class="track-list-img" />
@@ -44,8 +31,8 @@ import { Vue, Options } from "vue-class-component";
 import { PropType } from "vue";
 import { mapGetters } from "vuex";
 import { TrackListInterface } from "./types";
+import TrackListPlayback from "@/components/TrackList/TrackListPlayback.vue";
 import ArtistsList from "@/components/ArtistsList/index.vue";
-import api from "@/api";
 
 @Options({
   props: {
@@ -58,6 +45,7 @@ import api from "@/api";
   },
 
   components: {
+    TrackListPlayback,
     ArtistsList,
   },
 
@@ -70,14 +58,6 @@ import api from "@/api";
   },
 
   methods: {
-    spotifyUriParse(uri: string) {
-      const uri_arr = uri.split(":");
-      return {
-        type: uri_arr[1],
-        val: uri_arr[2],
-      };
-    },
-
     isCurrentTrack(offset: number): boolean {
       if (
         this.tracks[offset].uri ===
@@ -85,29 +65,6 @@ import api from "@/api";
       )
         return true;
       else return false;
-    },
-
-    async startPauseTrack(offset: number) {
-      if (this.isCurrentTrack(offset)) {
-        let request_params = {};
-        if (this.uris)
-          request_params = {
-            body: {
-              uris: this.uris,
-              offset: { position: offset },
-            },
-          };
-        else
-          request_params = {
-            body: {
-              context_uri: this.context_uri,
-              offset: { position: offset },
-            },
-          };
-        await api.spotify.player.startPlayback(request_params);
-      } else {
-        await api.spotify.SDK.togglePlay(this.player);
-      }
     },
   },
 
@@ -138,45 +95,6 @@ export default class TrackList extends Vue {}
   }
 }
 
-.track-list-index {
-  //
-}
-
-.track-list-num {
-  color: #999;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.track-list-current {
-  stroke: var(--color-accent-light);
-  fill: var(--color-accent-light);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  animation: playing 1s cubic-bezier(0, 1.3, 0.55, 0) infinite;
-  @keyframes playing {
-    0% {
-      transform: scale(1.2);
-    }
-    50% {
-      transform: scale(0.8);
-    }
-    100% {
-      transform: scale(1.2);
-    }
-  }
-}
-
-.track-list-control {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  fill: var(--color-text);
-  cursor: pointer;
-}
-
 .track-list-general {
   color: var(--color-text);
   display: flex;
@@ -187,7 +105,6 @@ export default class TrackList extends Vue {}
 .track-list-img {
   height: 40px;
   margin-right: 16px;
-  border-radius: 4px;
 }
 
 .track-list-info {
@@ -226,17 +143,5 @@ export default class TrackList extends Vue {}
   display: flex;
   justify-content: flex-end;
   align-items: center;
-}
-
-.track-list-row:hover {
-  .track-list-num {
-    display: none;
-  }
-  .track-list-current {
-    display: none;
-  }
-  .track-list-control {
-    display: flex;
-  }
 }
 </style>
