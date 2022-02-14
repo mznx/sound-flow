@@ -114,7 +114,6 @@ export default class Playlist extends Vue {}
 .playlist-info {
   width: 20%;
   margin-right: 60px;
-  margin-top: 10px;
   display: flex;
   flex-direction: column;
 
