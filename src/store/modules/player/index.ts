@@ -159,7 +159,9 @@ function setDeviceId(
   commit("SET_DEVICE_ID", device_id);
 }
 
-async function setPlayback({ commit }: ActionContext<PlayerState, RootState>) {
+async function setPlayback({
+  commit,
+}: ActionContext<PlayerState, RootState>): Promise<void> {
   const playback = await api.spotify.player.getPlaybackState({});
   /* --- */ console.log("[debug] player/setPlayback: ", playback);
   commit("SET_PLAYBACK", playback);
