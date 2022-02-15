@@ -25,12 +25,14 @@ export default {
     return request(req_options);
   },
 
-  getAvailableDevices(): Promise<SpotifyApi.UserDevice | API.NullOrError> {
+  getAvailableDevices(): Promise<
+    SpotifyApi.UserDevicesResponse | API.NullOrError
+  > {
     const req_options: API.Request = {
       method: "GET",
       path: "/me/player/devices",
     };
-    return request<SpotifyApi.UserDevice>(req_options);
+    return request<SpotifyApi.UserDevicesResponse>(req_options);
   },
 
   getCurrentTrack(
