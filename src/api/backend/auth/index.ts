@@ -19,4 +19,13 @@ export default {
 
     return request<API.CheckToken>(req_options);
   },
+
+  refreshToken: function (refresh_token: string): Promise<API.RefreshToken> {
+    const req_options: API.Request = {
+      method: "GET",
+      path: `/auth/refresh_token?refresh_token=${refresh_token}`,
+    };
+
+    return request<API.RefreshToken>(req_options);
+  },
 };

@@ -15,3 +15,8 @@ export interface UserAuthURL {
 export interface CheckToken {
   status: string;
 }
+
+export interface RefreshToken {
+  access_token: string;
+  expires_in: number;
+}
