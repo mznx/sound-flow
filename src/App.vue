@@ -7,8 +7,6 @@ import { Options, Vue } from "vue-class-component";
 import { mapGetters, mapActions } from "vuex";
 
 @Options({
-  components: {},
-
   computed: {
     ...mapGetters({
       inited: "app/getInitState",
@@ -22,7 +20,7 @@ import { mapGetters, mapActions } from "vuex";
     }),
   },
 
-  async created() {
+  created() {
     this.init();
   },
 })
