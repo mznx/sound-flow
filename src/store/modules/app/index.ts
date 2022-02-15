@@ -43,9 +43,6 @@ async function init({
   await dispatch("auth/init", null, { root: true });
   dispatch("setInitState", true);
   /* --- */ console.log("[debug] app/init (end)");
-  // if (rootGetters["auth/getAccessToken"]) {
-  //   dispatch("player/init", null, { root: true });
-  // }
 }
 
 function setInitState(
