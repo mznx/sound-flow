@@ -1,7 +1,7 @@
 <template>
   <div class="cb-device">
     <inline-svg
-      @click="getDevices"
+      @click="getDevices()"
       :src="require('@/assets/icons/control-device.svg')"
     />
     <div class="cd-device-container" :class="{ open: is_open }">
@@ -9,11 +9,19 @@
       <span
         v-for="(device, i) in devices"
         :key="i"
-        class="cd-device-device"
         :class="{ active: device.is_active }"
         @click="transferToDevice(i)"
+        class="cb-device-device"
       >
-        {{ device.name }}
+        <inline-svg
+          v-if="device.type === 'Computer'"
+          :src="require('@/assets/icons/control-device.svg')"
+        />
+        <inline-svg
+          v-else
+          :src="require('@/assets/icons/control-device-mobile.svg')"
+        />
+        <p>{{ device.name }}</p>
       </span>
     </div>
   </div>
@@ -42,19 +50,22 @@ import api from "@/api";
 
   methods: {
     async getDevices() {
-      const devices: any = await api.spotify.player.getAvailableDevices();
-      /* --- */ console.log("[debug] ControlDevice devices: ", devices);
-      if (devices) this.devices = devices.devices;
+      if (!this.is_open) {
+        const devices = await api.spotify.player.getAvailableDevices();
+        /* --- */ console.log("[debug] ControlDevice devices: ", devices);
+        if (devices && "devices" in devices) this.devices = devices.devices;
+      }
       this.is_open = !this.is_open;
     },
 
-    transferToDevice(i: number) {
-      if (!this.devices[i].is_active)
-        api.spotify.player.transferPlayback({
+    async transferToDevice(i: number) {
+      if (!this.devices[i].is_active) {
+        await api.spotify.player.transferPlayback({
           body: {
             device_ids: [this.devices[i].id],
           },
         });
+      }
     },
   },
 })
@@ -91,11 +102,23 @@ export default class ControlDevice extends Vue {}
   }
 }
 
-.cd-device-device {
-  display: block;
+.cb-device-device {
+  display: flex;
+  align-items: center;
   height: 40px;
   line-height: 40px;
   padding: 0 6px;
+
+  svg {
+    fill: var(--color-control);
+    margin-right: 5px;
+    flex-shrink: 0;
+  }
+
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+  }
 
   &:hover {
     cursor: pointer;
