@@ -3,9 +3,7 @@
   <div class="app-layout" v-else>
     <InfoBar />
     <div class="app-layout-content">
-      <div class="content-wrapper">
-        <router-view />
-      </div>
+      <router-view class="content-wrapper" />
     </div>
     <ControlBar />
   </div>
@@ -42,11 +40,7 @@ import ControlBar from "@/components/ControlBar/index.vue";
     /* --- */ console.log("[debug] AppLayout (created)");
     if (this.status === "not-logged") {
       this.$router.push({ name: "Login" });
-      return;
-    }
-
-    // player.init
-    if (this.status !== "loaded") {
+    } else if (this.status !== "loaded") {
       await this.playerInit();
       await this.userInit();
     }
