@@ -17,16 +17,12 @@
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import { mapGetters } from "vuex";
 import * as utils from "@/utils";
 import Slider from "@/components/Slider/index.vue";
 import api from "@/api";
 
 @Options({
-  props: {
-    player: Object,
-    playback_state: Object,
-  },
-
   data() {
     return {
       progress: 0,
@@ -40,20 +36,24 @@ import api from "@/api";
   },
 
   computed: {
-    is_playing: function (): boolean {
-      return this.playback_state.paused;
-    },
+    ...mapGetters({
+      player: "player/getPlayer",
+      device_id: "player/getDeviceId",
+      playback: "player/getPlayback",
+      playback_state: "player/getPlaybackState",
+    }),
     context: function () {
-      return this.playback_state.context;
+      return this.playback;
     },
   },
 
   methods: {
     updateProgress() {
       clearInterval(this.inverval);
-      this.progress = this.playback_state.position;
+      this.duration = this.playback.item.duration_ms;
+      this.progress = this.playback.progress_ms;
 
-      if (!this.playback_state.paused) {
+      if (this.playback.is_playing) {
         this.inverval = setInterval(() => {
           if (this.progress + 1000 <= this.duration) {
             this.progress += 1000;
@@ -63,7 +63,13 @@ import api from "@/api";
     },
 
     async onProgressChange() {
-      await api.spotify.SDK.seek(this.player, this.progress);
+      if (this.playback_state)
+        await api.spotify.SDK.seek(this.player, this.progress);
+      else {
+        await api.spotify.player.seek({
+          query: { position_ms: Math.trunc(this.progress) },
+        });
+      }
     },
 
     getTime(value: number) {
@@ -73,16 +79,11 @@ import api from "@/api";
 
   watch: {
     context() {
-      this.duration = this.playback_state.duration;
-      this.progress = this.playback_state.position;
-    },
-    is_playing() {
       this.updateProgress();
     },
   },
 
   created() {
-    this.duration = this.playback_state.duration;
     this.updateProgress();
   },
 })
