@@ -14,18 +14,13 @@
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import { mapGetters } from "vuex";
 import ArtistsList from "@/components/ArtistsList/index.vue";
 import * as utils from "@/utils";
 
 @Options({
-  props: {
-    player: Object,
-    playback_state: Object,
-  },
-
   data() {
     return {
-      album_id: "",
       album_link: "",
       track_name: "",
       track_artists: [],
@@ -39,8 +34,11 @@ import * as utils from "@/utils";
   },
 
   computed: {
-    context: function () {
-      return this.playback_state.context;
+    ...mapGetters({
+      playback: "player/getPlayback",
+    }),
+    item: function () {
+      return this.playback.item;
     },
   },
 
@@ -57,14 +55,17 @@ import * as utils from "@/utils";
     },
 
     updateContext(): void {
-      const track = this.playback_state.track_window.current_track;
-      const parsed_uri = utils.spotifyUriParse(this.playback_state.context.uri);
-      this.context_link = `/${parsed_uri.type}/${parsed_uri.val}`;
-      this.album_id = this.getTrackAlbumId(track);
-      this.album_link = "/album/" + this.album_id;
+      const track = this.playback.item;
+      this.album_link = "/album/" + track.album.id;
       this.track_name = track.name;
       this.track_artists = track.artists;
       this.track_image = this.getTrackMinImageUrl(track);
+
+      let context_uri = "";
+      if (this.playback.context) context_uri = this.playback.context.uri;
+      else context_uri = this.playback.item.artists[0].uri;
+      const parsed_uri = utils.spotifyUriParse(context_uri);
+      this.context_link = `/${parsed_uri.type}/${parsed_uri.val}`;
     },
   },
 
@@ -73,7 +74,7 @@ import * as utils from "@/utils";
   },
 
   watch: {
-    context() {
+    item() {
       this.updateContext();
     },
   },
