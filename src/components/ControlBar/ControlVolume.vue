@@ -14,15 +14,11 @@
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import { mapGetters } from "vuex";
 import Slider from "@/components/Slider/index.vue";
 import api from "@/api";
 
 @Options({
-  props: {
-    player: Object,
-    playback_state: Object,
-  },
-
   data() {
     return {
       volume: 0,
@@ -34,20 +30,32 @@ import api from "@/api";
   },
 
   computed: {
+    ...mapGetters({
+      player: "player/getPlayer",
+      playback: "player/getPlayback",
+      playback_state: "player/getPlaybackState",
+    }),
     context: function () {
-      return this.playback_state.context;
+      return this.playback;
     },
   },
 
   methods: {
     async onVolumeChange() {
-      await api.spotify.SDK.setVolume(this.player, this.volume);
+      if (this.playback_state)
+        await api.spotify.SDK.setVolume(this.player, this.volume);
+      else
+        await api.spotify.player.setVolume({
+          query: { volume_percent: Math.trunc(this.volume * 100) },
+        });
     },
   },
 
   watch: {
     async context() {
-      this.volume = await api.spotify.SDK.getVolume(this.player);
+      if (this.playback_state)
+        this.volume = await api.spotify.SDK.getVolume(this.player);
+      else this.volume = this.playback.device.volume_percent / 100;
     },
   },
 })

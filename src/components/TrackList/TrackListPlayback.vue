@@ -1,6 +1,6 @@
 <template>
   <span @click="startPauseTrack(num)" class="track-list-index">
-    <span v-if="isCurrentTrack() && !playback_state.paused">
+    <span v-if="isCurrentTrack() && playback.is_playing">
       <inline-svg
         class="track-list-current"
         :src="require('@/assets/icons/track-list-current.svg')"
@@ -48,8 +48,7 @@ import api from "@/api";
 
   methods: {
     isCurrentTrack(): boolean {
-      if (this.track.uri === this.playback_state.track_window.current_track.uri)
-        return true;
+      if (this.track.uri === this.playback.item.uri) return true;
       else return false;
     },
 
@@ -72,7 +71,10 @@ import api from "@/api";
           };
         await api.spotify.player.startPlayback(request_params);
       } else {
-        await api.spotify.SDK.togglePlay(this.player);
+        if (this.playback_state) await api.spotify.SDK.togglePlay(this.player);
+        else if (this.playback.is_playing)
+          await api.spotify.player.pausePlayback({});
+        else await api.spotify.player.startPlayback({});
       }
     },
   },

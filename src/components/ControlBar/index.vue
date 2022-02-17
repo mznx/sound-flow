@@ -1,26 +1,21 @@
 <template>
   <div class="control-bar">
     <div class="control-bar-left">
-      <ControlCurrentTrack :player="player" :playback_state="playback_state" />
+      <ControlCurrentTrack />
     </div>
     <div class="control-bar-center">
-      <ControlButtons
-        :player="player"
-        :device_id="device_id"
-        :playback_state="playback_state"
-      />
-      <ControlPlayback :player="player" :playback_state="playback_state" />
+      <ControlButtons />
+      <ControlPlayback />
     </div>
     <div class="control-bar-right">
       <ControlDevice />
-      <ControlVolume :player="player" :playback_state="playback_state" />
+      <ControlVolume />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
-import { mapGetters } from "vuex";
 import ControlButtons from "./ControlButtons.vue";
 import ControlPlayback from "./ControlPlayback.vue";
 import ControlVolume from "./ControlVolume.vue";
@@ -34,14 +29,6 @@ import ControlDevice from "./ControlDevice.vue";
     ControlVolume,
     ControlCurrentTrack,
     ControlDevice,
-  },
-
-  computed: {
-    ...mapGetters({
-      player: "player/getPlayer",
-      device_id: "player/getDeviceId",
-      playback_state: "player/getPlaybackState",
-    }),
   },
 })
 export default class ControlBar extends Vue {}

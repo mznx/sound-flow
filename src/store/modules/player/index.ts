@@ -86,6 +86,18 @@ async function init({
     });
   };
 
+  const watchPlayback = () => {
+    const interval = setInterval(async () => {
+      console.log("Wait playback...");
+      const playback_state: Spotify.PlaybackState | null = state.playback_state;
+      if (playback_state !== null) {
+        clearInterval(interval);
+      } else {
+        await dispatch("setPlayback");
+      }
+    }, 2000);
+  };
+
   const script = document.createElement("script");
   script.src = "https://sdk.scdn.co/spotify-player.js";
   script.async = true;
@@ -126,8 +138,10 @@ async function init({
   });
 
   player.addListener("player_state_changed", (playback_state) => {
+    console.log("[Spotify WPS] Playback State changed", playback_state);
     dispatch("setPlaybackState", playback_state);
     dispatch("setPlayback");
+    if (!playback_state) watchPlayback();
   });
 
   player.addListener("autoplay_failed", () => {
@@ -138,6 +152,7 @@ async function init({
 
   await api.spotify.SDK.connect(player);
   await waitTransferComplete();
+  await dispatch("setPlayback");
 
   dispatch("app/setStatus", "loaded", { root: true });
   /* --- */ console.log("[debug] player/init (end)");

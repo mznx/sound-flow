@@ -96,7 +96,7 @@ export default {
   ): Promise<API.NullOrError> {
     const query = utils.queryObjToStr(opts.query);
     const req_options: API.Request = {
-      method: "POST",
+      method: "PUT",
       path: `/me/player/seek?${query}`,
     };
     return request(req_options);

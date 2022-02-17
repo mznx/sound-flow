@@ -2,7 +2,7 @@
   <div class="cb-buttons">
     <button
       class="cb-shuffle"
-      :class="{ active: this.playback_state.shuffle }"
+      :class="{ active: this.playback.shuffle_state }"
       @click="toggleShuffle"
     >
       <inline-svg :src="require('@/assets/icons/control-shuffle.svg')" />
@@ -14,7 +14,7 @@
 
     <button class="cb-playpause" @click="playPause">
       <inline-svg
-        v-if="this.playback_state.paused"
+        v-if="!this.playback.is_playing"
         :src="require('@/assets/icons/control-play.svg')"
         width="30px"
         height="30px"
@@ -34,8 +34,8 @@
     <button
       class="cb-repeat"
       :class="[
-        { active: this.playback_state.repeat_mode !== 0 },
-        { track: this.playback_state.repeat_mode === 2 },
+        { active: this.playback.repeat_state !== 'off' },
+        { track: this.playback.repeat_state === 'track' },
       ]"
       @click="toggleRepeatMode"
     >
@@ -46,58 +46,65 @@
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import { mapGetters } from "vuex";
 import api from "@/api";
 
 @Options({
-  props: {
-    player: Object,
-    device_id: String,
-    playback_state: Object,
+  computed: {
+    ...mapGetters({
+      player: "player/getPlayer",
+      device_id: "player/getDeviceId",
+      playback: "player/getPlayback",
+      playback_state: "player/getPlaybackState",
+    }),
   },
 
   methods: {
     async playPause() {
       //
-      await api.spotify.SDK.togglePlay(this.player);
+      if (this.playback_state) await api.spotify.SDK.togglePlay(this.player);
+      else if (this.playback.is_playing)
+        await api.spotify.player.pausePlayback({});
+      else await api.spotify.player.startPlayback({});
     },
 
     async previousTrack() {
       //
-      await api.spotify.SDK.previousTrack(this.player);
+      if (this.playback_state) await api.spotify.SDK.previousTrack(this.player);
+      else await api.spotify.player.prevTrack({});
     },
 
     async nextTrack() {
       //
-      await api.spotify.SDK.nextTrack(this.player);
+      if (this.playback_state) await api.spotify.SDK.nextTrack(this.player);
+      else await api.spotify.player.nextTrack({});
     },
 
-    toggleShuffle() {
-      api.spotify.player.togglePlaybackShuffle({
+    async toggleShuffle() {
+      await api.spotify.player.togglePlaybackShuffle({
         query: {
-          state: !this.playback_state.shuffle,
-          device_id: this.device_id,
+          state: !this.playback.shuffle_state,
         },
       });
     },
 
-    toggleRepeatMode() {
+    async toggleRepeatMode() {
       let repeat_mode = "";
-      switch (this.playback_state.repeat_mode) {
-        case 0:
+      switch (this.playback.repeat_state) {
+        case "off":
           repeat_mode = "context";
           break;
-        case 1:
+        case "context":
           repeat_mode = "track";
           break;
-        case 2:
+        case "track":
           repeat_mode = "off";
           break;
       }
 
-      api.spotify.player.setRepeatMode({
+      await api.spotify.player.setRepeatMode({
         query: {
           state: repeat_mode,
-          device_id: this.device_id,
         },
       });
     },
