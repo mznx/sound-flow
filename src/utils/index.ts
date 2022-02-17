@@ -15,7 +15,7 @@ export function queryObjToStr<T>(query: T): string {
 
   if (query)
     JSON.parse(JSON.stringify(query), (key, val) => {
-      result += `${key}=${val}&`;
+      if (key) result += `${key}=${val}&`;
     });
 
   return result;
