@@ -59,11 +59,7 @@ import ArtistsList from "@/components/ArtistsList/index.vue";
 
   methods: {
     isCurrentTrack(offset: number): boolean {
-      if (
-        this.tracks[offset].uri ===
-        this.playback_state.track_window.current_track.uri
-      )
-        return true;
+      if (this.tracks[offset].uri === this.playback.item.uri) return true;
       else return false;
     },
   },
