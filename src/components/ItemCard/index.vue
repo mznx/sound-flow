@@ -1,6 +1,7 @@
 <template>
-  <div class="item-card" @click="openItemContext">
-    <p>{{ item.name }}</p>
+  <div class="item-card" @click="openItemContext()">
+    <img :src="getItemImage()" class="item-img" />
+    <p class="item-name">{{ item.name }}</p>
   </div>
 </template>
 
@@ -18,6 +19,13 @@ import * as utils from "@/utils";
       const uri = utils.spotifyUriParse(this.item.uri);
       this.$router.push(`/${uri.type}/${uri.val}`);
     },
+
+    getItemImage() {
+      const url = utils.getImageUrl(this.item, true);
+      console.log(url);
+      // return utils.getImageUrl(this.item, true);
+      return url;
+    },
   },
 })
 export default class ItemCard extends Vue {}
@@ -26,13 +34,28 @@ export default class ItemCard extends Vue {}
 <style scoped lang="scss">
 .item-card {
   width: 250px;
-  height: 250px;
-  background-color: var(--color-fg);
+  height: 300px;
+  background-color: var(--color-fg-light);
   border-radius: 10px;
+  padding: 10px;
   color: var(--color-text);
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     cursor: pointer;
   }
+}
+
+.item-img {
+  //
+}
+
+.item-name {
+  height: 50px;
+  line-height: 50px;
+  font-size: 13pt;
+  font-weight: bold;
+  overflow: hidden;
 }
 </style>
