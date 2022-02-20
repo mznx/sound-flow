@@ -35,15 +35,17 @@ export default class ItemCard extends Vue {}
 .item-card {
   width: 250px;
   height: 300px;
-  background-color: var(--color-fg-light);
+  background-color: var(--color-elem);
   border-radius: 10px;
   padding: 10px;
   color: var(--color-text);
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease;
 
   &:hover {
     cursor: pointer;
+    background-color: var(--color-elem-light);
   }
 }
 
