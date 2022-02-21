@@ -6,6 +6,7 @@
       <router-view class="content-wrapper" />
     </div>
     <ControlBar />
+    <SideMenu />
   </div>
 </template>
 
@@ -15,12 +16,14 @@ import { mapGetters, mapActions } from "vuex";
 import CircleLoader from "@/components/CircleLoader/index.vue";
 import InfoBar from "@/components/InfoBar/index.vue";
 import ControlBar from "@/components/ControlBar/index.vue";
+import SideMenu from "@/components/SideMenu/index.vue";
 
 @Options({
   components: {
     CircleLoader,
     InfoBar,
     ControlBar,
+    SideMenu,
   },
 
   computed: {
@@ -67,6 +70,6 @@ export default class AppLayout extends Vue {}
 .content-wrapper {
   max-width: 1400px;
   margin: 20px auto;
-  padding: 0 20px;
+  padding: 0 40px;
 }
 </style>
